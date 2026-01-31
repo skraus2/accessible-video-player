@@ -1,7 +1,7 @@
 {
   "name": "accessible-video-player",
   "version": "1.0.0",
-  "description": "WCAG 2.2 AA konformer Web-Video-Player (Bachelorarbeit)",
+  "description": "Konzeption und prototypische Umsetzung eines barrierefreien Web-Video-Players nach WCAG 2.2 Level AA - Bachelorarbeit",
   "type": "module",
   "main": "src/index.html",
   "scripts": {
@@ -22,9 +22,12 @@
   "keywords": [
     "accessibility",
     "wcag",
+    "wcag-2.2",
+    "level-aa",
     "video-player",
     "a11y",
-    "bachelorarbeit"
+    "bachelorarbeit",
+    "web-accessibility"
   ],
   "author": "Simon Kraus <simon.kraus@smail.th-koeln.de>",
   "license": "MIT",
