@@ -11,3 +11,6 @@ docs/test-reports/playwright/
 
 # Editor
 .vscode/
+
+# Test video (download separately, see README; often >5 MB)
+src/assets/videos/sample.mp4
