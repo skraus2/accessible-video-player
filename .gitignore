@@ -4,5 +4,10 @@ node_modules/
 # Coverage
 coverage/
 
+# Playwright
+test-results/
+playwright-report/
+docs/test-reports/playwright/
+
 # Editor
 .vscode/
