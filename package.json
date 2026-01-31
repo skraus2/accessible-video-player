@@ -14,11 +14,11 @@
     "a11y",
     "bachelorarbeit"
   ],
-  "author": "Dein Name <deine.email@example.com>",
+  "author": "Simon Kraus <simon.kraus@smail.th-koeln.de>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/[username]/accessible-video-player.git"
+    "url": "https://github.com/skraus2/accessible-video-player.git"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
