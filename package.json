@@ -2,10 +2,14 @@
   "name": "accessible-video-player",
   "version": "1.0.0",
   "description": "WCAG 2.2 AA konformer Web-Video-Player (Bachelorarbeit)",
+  "type": "module",
   "main": "src/index.html",
   "scripts": {
     "dev": "live-server --port=3000 --open=/src/index.html",
-    "test": "echo \"Tests werden in späteren Tickets eingerichtet\" && exit 0"
+    "test": "echo \"Tests werden in späteren Tickets eingerichtet\" && exit 0",
+    "lint": "eslint --no-error-on-unmatched-pattern src/**/*.js",
+    "lint:fix": "eslint --no-error-on-unmatched-pattern src/**/*.js --fix",
+    "format": "prettier --write \"src/**/*.{js,css,html}\""
   },
   "keywords": [
     "accessibility",
@@ -21,6 +25,10 @@
     "url": "https://github.com/skraus2/accessible-video-player.git"
   },
   "devDependencies": {
-    "live-server": "^1.2.2"
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "live-server": "^1.2.2",
+    "prettier": "^3.8.1"
   }
 }
