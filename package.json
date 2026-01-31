@@ -1,0 +1,17 @@
+{
+  "name": "accessible-video-player",
+  "version": "1.0.0",
+  "description": "WCAG 2.2 AA konformer Web-Video-Player (Bachelorarbeit)",
+  "main": "src/index.html",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=/src/index.html",
+    "test": "echo \"Tests werden in späteren Tickets eingerichtet\" && exit 0"
+  },
+  "keywords": ["accessibility", "wcag", "video-player", "a11y", "bachelorarbeit"],
+  "author": "Dein Name <deine.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/[username]/accessible-video-player.git"
+  }
+}
