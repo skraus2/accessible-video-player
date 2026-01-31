@@ -65,6 +65,8 @@ Entwicklung und Evaluation eines vollständig barrierefreien HTML5-Video-Players
 
    Öffnet automatisch http://localhost:3000
 
+5. **Pre-push:** Beim ersten `npm install` richtet Husky die Git-Hooks ein. Vor jedem `git push` laufen automatisch Lint und Tests (Unit + Integration); E2E läuft nur in der CI.
+
 ### Test-Video (sample.mp4)
 
 Der Player erwartet ein Test-Video unter `src/assets/videos/sample.mp4` (nicht im Repo, siehe `.gitignore`).

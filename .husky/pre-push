@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Pre-push: run lint and unit+integration tests. E2E runs in CI only.
+npm run lint
+npm run test
