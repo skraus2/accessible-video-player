@@ -1,0 +1,11 @@
+/* Player-Styles – IMP-01: Video ohne native Controls */
+.player-container {
+  max-width: 64rem;
+  margin-inline: auto;
+}
+
+.player-container video {
+  display: block;
+  width: 100%;
+  height: auto;
+}

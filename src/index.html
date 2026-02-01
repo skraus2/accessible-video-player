@@ -35,9 +35,40 @@
     <link rel="stylesheet" href="css/player.css" />
   </head>
   <body>
-    <h1>Setup erfolgreich!</h1>
-    <p>Wenn du diese Seite siehst, funktioniert der Dev-Server.</p>
-    <!-- Player wird hier implementiert -->
+    <h1>Barrierefreier Video-Player</h1>
+
+    <!-- IMP-01: Player-Container mit role="region" und aria-label (WCAG 1.1.1, 1.2.2, 1.2.3/1.2.5) -->
+    <section
+      class="player-container"
+      role="region"
+      aria-label="Video-Player: Barrierefreier Video-Player mit Untertiteln und Audiodeskription"
+    >
+      <video
+        id="player-video"
+        preload="metadata"
+        aria-label="Testvideo mit Untertiteln und Audiodeskription"
+      >
+        <source src="assets/videos/sample.mp4" type="video/mp4" />
+        <!-- Untertitel (Captions) – WCAG 1.2.2 -->
+        <track
+          id="track-captions"
+          kind="captions"
+          src="assets/videos/captions-de.vtt"
+          srclang="de"
+          label="Deutsch"
+          default
+        />
+        <!-- Audiodeskription (Descriptions) – WCAG 1.2.3, 1.2.5 -->
+        <track
+          id="track-descriptions"
+          kind="descriptions"
+          src="assets/videos/descriptions-de.vtt"
+          srclang="de"
+          label="Deutsch – Audiodeskription"
+        />
+      </video>
+    </section>
+
     <script type="module" src="js/player.js"></script>
   </body>
 </html>
