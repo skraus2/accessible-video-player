@@ -56,4 +56,6 @@
   --color-range-track-fill: #0066cc;
   --color-range-thumb: #0066cc;
   --color-range-thumb-border: #ffffff;
+  /* IMP-05: Zeitanzeige – Text min. 4,5:1 Kontrast (WCAG 1.4.3) */
+  --color-time-text: #1a1a1a;
 }

@@ -210,3 +210,26 @@
 .player-range--timeline::-moz-range-thumb:focus {
   outline: none;
 }
+
+/* === IMP-05: Zeitanzeige (Current / Duration, statisch) === */
+.player-time {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.125em;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-time-text);
+}
+
+.player-time__current,
+.player-time__duration {
+  min-width: 2.5em;
+  text-align: right;
+}
+
+.player-time__separator {
+  color: var(--color-time-text);
+  user-select: none;
+}
