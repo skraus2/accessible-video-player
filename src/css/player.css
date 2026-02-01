@@ -1,11 +1,69 @@
-/* Player-Styles – IMP-01: Video ohne native Controls */
+/**
+ * Player-Layout & Basis-Styling | IMP-02
+ * Video-Bereich + Controls (Hauptleiste, Sekundärleiste)
+ * Layout stabil bei 200% Zoom (rem, flex, min-height)
+ */
+
 .player-container {
   max-width: 64rem;
   margin-inline: auto;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background: var(--color-bg);
+  border-radius: var(--player-radius);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.player-container video {
+/* === Video-Bereich === */
+.player-video-area {
+  position: relative;
+  background: var(--color-text);
+}
+
+.player-video-area video {
   display: block;
   width: 100%;
   height: auto;
+  vertical-align: middle;
+}
+
+/* === Controls-Bereich (Haupt- + Sekundärleiste) === */
+.player-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Hauptleiste – primäre Steuerung */
+.player-bar--main {
+  min-height: var(--player-bar-height);
+  padding-inline: var(--space-md);
+  padding-block: var(--space-sm);
+  background: var(--color-bg-bar);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Sekundärleiste – Zusatzoptionen */
+.player-bar--secondary {
+  min-height: var(--player-bar-secondary-height);
+  padding-inline: var(--space-md);
+  padding-block: var(--space-xs);
+  background: var(--color-bg-bar-secondary);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Gemeinsame Bar-Basis (für Fokus/Kontrast später) */
+.player-bar {
+  /* Platzhalter für Fokus-Ring: outline mit --player-focus-outline-width */
 }

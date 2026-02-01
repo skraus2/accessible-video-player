@@ -1,1 +1,48 @@
-/* Design-Tokens / CSS-Variablen – werden in späteren IMPs genutzt */
+/**
+ * Design System – CSS-Variablen
+ * IMP-02 | WCAG 1.4.3 (Kontrast), 1.4.11 (Nicht-Text-Kontrast), 1.4.4 (Textgröße)
+ */
+:root {
+  /* === Farben (Kontrast mind. 4.5:1 Text, 3:1 UI) === */
+  --color-primary: #0066cc;
+  --color-primary-hover: #0052a3;
+  --color-primary-active: #003d7a;
+  --color-primary-focus-ring: #0066cc;
+
+  --color-text: #1a1a1a;
+  --color-text-muted: #4a4a4a;
+  --color-text-on-primary: #ffffff;
+
+  --color-bg: #ffffff;
+  --color-bg-bar: #f0f0f0;
+  --color-bg-bar-secondary: #e5e5e5;
+  --color-border: #cccccc;
+  --color-border-focus: #0066cc;
+
+  /* === Abstände (rem für 200%-Zoom-Stabilität) === */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 2.5rem;
+
+  /* === Schriften (1rem = 16px Basis, skaliert mit Zoom) === */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* === Player-spezifisch === */
+  --player-bar-height: 3rem;
+  --player-bar-secondary-height: 2.5rem;
+  --player-radius: 0.25rem;
+  --player-focus-outline-width: 0.2rem;
+}
