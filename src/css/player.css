@@ -67,3 +67,64 @@
 .player-bar {
   /* Platzhalter für Fokus-Ring: outline mit --player-focus-outline-width */
 }
+
+/* === IMP-03: Play/Pause-Button (HTML + CSS, ohne Funktion) === */
+.player-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+/* Mindestgröße 44×44px (WCAG 2.5.8 Zielgröße), Fokus 3px (WCAG 2.4.7) */
+.player-btn--play-pause {
+  min-width: var(--player-touch-target);
+  min-height: var(--player-touch-target);
+  color: var(--color-icon-on-bar);
+  border-radius: var(--player-radius);
+}
+
+.player-btn--play-pause:hover {
+  background: var(--color-border);
+}
+
+.player-btn--play-pause:focus {
+  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.player-btn--play-pause:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.player-btn--play-pause:focus-visible {
+  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.player-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.player-btn__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Pause-Icon initial versteckt (später per .is-playing umschalten) */
+.player-btn__icon--pause {
+  display: none;
+}
+
+.player-btn__icon--pause[hidden] {
+  display: none !important;
+}

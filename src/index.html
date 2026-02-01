@@ -72,7 +72,25 @@
       <div class="player-controls">
         <span class="sr-only">Hauptleiste: Wiedergabe und Zeitsteuerung</span>
         <div class="player-bar player-bar--main" role="presentation">
-          <!-- Hauptleiste: Play, Zeit, Volumen etc. (später) -->
+          <!-- IMP-03: Play/Pause (ohne Funktion), WCAG 1.1.1, 1.4.11, 2.5.8, 2.4.7 -->
+          <button
+            type="button"
+            class="player-btn player-btn--play-pause"
+            aria-label="Abspielen"
+            title="Abspielen"
+          >
+            <span class="player-btn__icon player-btn__icon--play" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                <path d="M8 5v14l11-7L8 5z" />
+              </svg>
+            </span>
+            <span class="player-btn__icon player-btn__icon--pause" aria-hidden="true" hidden>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+              </svg>
+            </span>
+          </button>
+          <!-- Zeit, Volumen etc. (später) -->
         </div>
         <span class="sr-only">Sekundärleiste: Untertitel und Einstellungen</span>
         <div class="player-bar player-bar--secondary" role="presentation">

@@ -45,4 +45,8 @@
   --player-bar-secondary-height: 2.5rem;
   --player-radius: 0.25rem;
   --player-focus-outline-width: 0.2rem;
+  /* IMP-03: Fokus 3px, Zielgröße 44×44 */
+  --player-focus-outline-width-button: 3px;
+  --player-touch-target: 2.75rem; /* 44px bei 16px Basis */
+  --color-icon-on-bar: #1a1a1a; /* 3:1+ auf --color-bg-bar */
 }
