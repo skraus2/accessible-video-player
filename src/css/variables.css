@@ -49,4 +49,11 @@
   --player-focus-outline-width-button: 3px;
   --player-touch-target: 2.75rem; /* 44px bei 16px Basis */
   --color-icon-on-bar: #1a1a1a; /* 3:1+ auf --color-bg-bar */
+  /* IMP-04: Timeline-Slider – Track/Thumb, 3:1 Kontrast */
+  --player-range-track-height: 0.375rem;
+  --player-range-thumb-size: 2.75rem; /* 44px Touch-Zielgröße */
+  --color-range-track: #cccccc;
+  --color-range-track-fill: #0066cc;
+  --color-range-thumb: #0066cc;
+  --color-range-thumb-border: #ffffff;
 }

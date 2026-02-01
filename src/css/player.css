@@ -128,3 +128,85 @@
 .player-btn__icon--pause[hidden] {
   display: none !important;
 }
+
+/* === IMP-04: Timeline-Slider (HTML + CSS, ohne Funktion) === */
+.player-timeline {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.player-range {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.player-range:focus {
+  outline: none;
+}
+
+.player-range:focus-visible {
+  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--player-radius);
+}
+
+/* Track (Hintergrund) – visuell erkennbar, 3:1 Kontrast */
+.player-range--timeline {
+  block-size: var(--player-range-thumb-size);
+  display: block;
+}
+
+.player-range--timeline::-webkit-slider-runnable-track {
+  width: 100%;
+  height: var(--player-range-track-height);
+  background: var(--color-range-track);
+  border-radius: var(--player-radius);
+}
+
+.player-range--timeline::-moz-range-track {
+  width: 100%;
+  height: var(--player-range-track-height);
+  background: var(--color-range-track);
+  border-radius: var(--player-radius);
+}
+
+/* Thumb – min. 44×44px (WCAG 2.5.8), 3:1 Kontrast */
+.player-range--timeline::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--player-range-thumb-size);
+  height: var(--player-range-thumb-size);
+  margin-top: calc(
+    (var(--player-range-track-height) - var(--player-range-thumb-size)) / 2
+  );
+  background: var(--color-range-thumb);
+  border: 2px solid var(--color-range-thumb-border);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.player-range--timeline::-moz-range-thumb {
+  width: var(--player-range-thumb-size);
+  height: var(--player-range-thumb-size);
+  background: var(--color-range-thumb);
+  border: 2px solid var(--color-range-thumb-border);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: Fokus auf Thumb (WebKit) – Outline liegt am Input */
+.player-range--timeline::-webkit-slider-thumb:focus {
+  outline: none;
+}
+
+.player-range--timeline::-moz-range-thumb:focus {
+  outline: none;
+}
