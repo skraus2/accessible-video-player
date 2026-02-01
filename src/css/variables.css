@@ -58,4 +58,6 @@
   --color-range-thumb-border: #ffffff;
   /* IMP-05: Zeitanzeige – Text min. 4,5:1 Kontrast (WCAG 1.4.3) */
   --color-time-text: #1a1a1a;
+  /* IMP-06: Lautstärke-Slider – Thumb 44×44px Touch */
+  --player-volume-slider-width: 5rem;
 }

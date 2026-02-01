@@ -107,6 +107,27 @@
   outline-offset: 2px;
 }
 
+/* IMP-06: Lautstärke-Button – 44×44px, gleicher Fokus wie Play/Pause */
+.player-btn--volume {
+  min-width: var(--player-touch-target);
+  min-height: var(--player-touch-target);
+  color: var(--color-icon-on-bar);
+  border-radius: var(--player-radius);
+}
+
+.player-btn--volume:hover {
+  background: var(--color-border);
+}
+
+.player-btn--volume:focus-visible {
+  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.player-btn--volume:focus:not(:focus-visible) {
+  outline: none;
+}
+
 .player-btn__icon {
   display: inline-flex;
   align-items: center;
@@ -232,4 +253,66 @@
 .player-time__separator {
   color: var(--color-time-text);
   user-select: none;
+}
+
+/* === IMP-06: Lautstärke-Button und -Slider (HTML + CSS, ohne Funktion) === */
+.player-volume {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Slider-Container: initial versteckt (wird per JS bei aria-expanded="true" eingeblendet) */
+.player-volume__slider {
+  display: none;
+  width: var(--player-volume-slider-width);
+  align-items: center;
+}
+
+.player-volume__slider[hidden] {
+  display: none !important;
+}
+
+/* Lautstärke-Range: gleiche Basis wie Timeline, Thumb 44×44px (Touch) */
+.player-range--volume {
+  block-size: var(--player-range-thumb-size);
+}
+
+.player-range--volume::-webkit-slider-runnable-track {
+  width: 100%;
+  height: var(--player-range-track-height);
+  background: var(--color-range-track);
+  border-radius: var(--player-radius);
+}
+
+.player-range--volume::-moz-range-track {
+  width: 100%;
+  height: var(--player-range-track-height);
+  background: var(--color-range-track);
+  border-radius: var(--player-radius);
+}
+
+.player-range--volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--player-range-thumb-size);
+  height: var(--player-range-thumb-size);
+  margin-top: calc(
+    (var(--player-range-track-height) - var(--player-range-thumb-size)) / 2
+  );
+  background: var(--color-range-thumb);
+  border: 2px solid var(--color-range-thumb-border);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.player-range--volume::-moz-range-thumb {
+  width: var(--player-range-thumb-size);
+  height: var(--player-range-thumb-size);
+  background: var(--color-range-thumb);
+  border: 2px solid var(--color-range-thumb-border);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
