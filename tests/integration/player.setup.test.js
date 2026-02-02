@@ -1036,6 +1036,39 @@ describe('Live-Region Status-Updates (IMP-20I-E)', () => {
 
     expect(liveRegion).toHaveTextContent('Untertitel deaktiviert');
   });
+
+  test('IMP-36: Video-Klick (Play) ohne Fokus auf Button → Live-Region meldet Status', () => {
+    const video = document.getElementById('player-video');
+    const timelineSlider = screen.getByRole('slider', {
+      name: 'Videoposition',
+    });
+    const liveRegion = document.getElementById('player-status');
+
+    timelineSlider.focus();
+    expect(document.activeElement).toBe(timelineSlider);
+
+    fireEvent.click(video);
+
+    expect(liveRegion).toHaveTextContent('Video wird abgespielt');
+    expect(video.paused).toBe(false);
+  });
+
+  test('IMP-36: AD-Toggle befüllt Live-Region', async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupTracksMock();
+    await import('../../src/js/player.js');
+
+    const adButton = screen.getByRole('button', { name: 'Audiodeskription' });
+    const liveRegion = document.getElementById('player-status');
+
+    fireEvent.click(adButton);
+    expect(liveRegion).toHaveTextContent('Audiodeskription aktiviert');
+
+    fireEvent.click(adButton);
+    expect(liveRegion).toHaveTextContent('Audiodeskription deaktiviert');
+  });
 });
 
 describe('Tab-Reihenfolge (IMP-21)', () => {

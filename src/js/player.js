@@ -334,7 +334,15 @@ function initDescriptionsControls() {
   }
 
   button.addEventListener('click', () => {
-    toggleDescriptions(video, /** @type {HTMLButtonElement} */ (button));
+    const result = toggleDescriptions(
+      video,
+      /** @type {HTMLButtonElement} */ (button)
+    );
+    if (result?.enabled === true) {
+      announceStatus('Audiodeskription aktiviert');
+    } else if (result?.enabled === false) {
+      announceStatus('Audiodeskription deaktiviert');
+    }
   });
 }
 
