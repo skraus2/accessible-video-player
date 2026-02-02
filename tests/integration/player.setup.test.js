@@ -454,6 +454,24 @@ describe('Settings-Panel Integration (IMP-20I-D)', () => {
     expect(speedSelect).toHaveFocus();
   });
 
+  test('IMP-25: Tab zu Settings-Button, Enter drücken → Fokus auf Playback-Speed-Select', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const speedSelect = screen.getByLabelText('Wiedergabegeschwindigkeit');
+
+    settingsButton.focus();
+    await user.keyboard('{Enter}');
+
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    expect(
+      document.getElementById('player-settings-panel')
+    ).not.toHaveAttribute('hidden');
+    expect(speedSelect).toHaveFocus();
+  });
+
   test('ESC schließt Panel und setzt Fokus zurück auf Settings-Button', async () => {
     const user = userEvent.setup();
     const settingsButton = screen.getByRole('button', {
