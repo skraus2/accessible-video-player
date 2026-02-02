@@ -60,4 +60,7 @@
   --color-time-text: #1a1a1a;
   /* IMP-06: Lautstärke-Slider – Thumb 44×44px Touch */
   --player-volume-slider-width: 5rem;
+  /* IMP-08: Settings-Panel – Modal/Overlay */
+  --color-backdrop: rgba(0, 0, 0, 0.5);
+  --player-settings-max-width: 28rem;
 }
