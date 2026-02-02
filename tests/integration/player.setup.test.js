@@ -185,6 +185,68 @@ describe('Untertitel-Toggle Integration (IMP-20I-B)', () => {
   });
 });
 
+describe('Timeline-Slider Integration (IMP-20I-C)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupTimelineVideoMock(615);
+    await import('../../src/js/player.js');
+  });
+
+  test('Timeline-Slider aktualisiert Video-Position und aria-valuetext', () => {
+    const slider = screen.getByRole('slider', { name: 'Videoposition' });
+    const video = document.getElementById('player-video');
+
+    slider.value = '154';
+    fireEvent.input(slider);
+
+    // JSDOM feuert timeupdate nicht automatisch bei currentTime-Änderung
+    fireEvent(video, new Event('timeupdate'));
+
+    expect(video.currentTime).toBe(154);
+    expect(slider).toHaveAttribute('aria-valuenow', '154');
+    expect(slider).toHaveAttribute('aria-valuetext', '2 Minuten 34 Sekunden');
+  });
+
+  test('Zeitanzeige zeigt formatierte Zeit (formatTime-Integration)', () => {
+    const slider = screen.getByRole('slider', { name: 'Videoposition' });
+    const video = document.getElementById('player-video');
+    const timeCurrent = document.getElementById('player-time-current');
+    const timeDuration = document.getElementById('player-time-duration');
+
+    slider.value = '154';
+    fireEvent.input(slider);
+    fireEvent(video, new Event('timeupdate'));
+
+    expect(timeCurrent.textContent).toBe('2:34');
+    expect(timeDuration.textContent).toBe('10:15');
+  });
+});
+
+/** Mockt Video für Timeline-Tests (duration, readyState, currentTime) */
+function setupTimelineVideoMock(duration = 615) {
+  const video = document.getElementById('player-video');
+  if (!video) return;
+
+  let currentTime = 0;
+  Object.defineProperty(video, 'duration', {
+    get: () => duration,
+    configurable: true,
+  });
+  Object.defineProperty(video, 'currentTime', {
+    get: () => currentTime,
+    set: v => {
+      currentTime = Number(v);
+    },
+    configurable: true,
+  });
+  Object.defineProperty(video, 'readyState', {
+    value: 1, // HAVE_METADATA
+    configurable: true,
+  });
+}
+
 /** Mockt TextTrack für Captions (CC)-Tests (textTracks ist read-only in JSDOM) */
 function setupCaptionsTrackMock() {
   const video = document.getElementById('player-video');
