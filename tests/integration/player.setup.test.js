@@ -135,6 +135,44 @@ describe('Play/Pause Integration (IMP-20I-A)', () => {
   });
 });
 
+describe('Play/Pause aria-label dynamisch (IMP-32, WCAG 4.1.2)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupVideoMock();
+    await import('../../src/js/player.js');
+  });
+
+  test('Video pausiert: SR sagt „Abspielen, Button" (aria-label korrekt)', () => {
+    const button = screen.getByRole('button', { name: 'Abspielen' });
+    expect(button).toHaveAttribute('aria-label', 'Abspielen');
+    expect(button).not.toHaveAttribute('aria-label', 'Button');
+  });
+
+  test('Video läuft: SR sagt „Pause, Button" (aria-label korrekt)', () => {
+    const button = screen.getByRole('button', { name: 'Abspielen' });
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-label', 'Pause');
+  });
+
+  test('aria-label wechselt synchron mit Video-Zustand', () => {
+    const button = screen.getByRole('button', { name: 'Abspielen' });
+    const video = document.getElementById('player-video');
+
+    expect(button.getAttribute('aria-label')).toBe('Abspielen');
+    expect(video.paused).toBe(true);
+
+    fireEvent.click(button);
+    expect(button.getAttribute('aria-label')).toBe('Pause');
+    expect(video.paused).toBe(false);
+
+    fireEvent.click(button);
+    expect(button.getAttribute('aria-label')).toBe('Abspielen');
+    expect(video.paused).toBe(true);
+  });
+});
+
 describe('Play/Pause via Tastatur (IMP-22)', () => {
   beforeEach(async () => {
     jest.resetModules();
