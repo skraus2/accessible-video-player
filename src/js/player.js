@@ -255,9 +255,9 @@ function initDescriptionsControls() {
 }
 
 /**
- * IMP-16: Settings-Button öffnet Settings-Panel
- * - Click: Panel anzeigen, aria-expanded
- * - Close-Button + Backdrop-Click: Panel schließen
+ * IMP-16 + IMP-17: Settings-Panel öffnen/schließen
+ * - Click Settings: Panel anzeigen, aria-expanded
+ * - Close-Button, Backdrop-Click, ESC: Panel schließen
  */
 function initSettingsControls() {
   const settingsButton = document.querySelector('.player-btn--settings');
@@ -277,6 +277,10 @@ function initSettingsControls() {
     settingsButton.setAttribute('aria-expanded', 'false');
   }
 
+  function isPanelOpen() {
+    return !panel.hasAttribute('hidden');
+  }
+
   settingsButton.addEventListener('click', () => {
     openPanel();
   });
@@ -292,6 +296,12 @@ function initSettingsControls() {
       closePanel();
     });
   }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isPanelOpen()) {
+      closePanel();
+    }
+  });
 }
 
 // Init
