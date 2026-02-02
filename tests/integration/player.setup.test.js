@@ -803,6 +803,55 @@ describe('Settings-Panel Integration (IMP-20I-D)', () => {
   });
 });
 
+describe('aria-expanded für Settings und Lautstärke (IMP-34, WCAG 4.1.2)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  test('Settings: SR sagt „eingeklappt" / „ausgeklappt" – aria-expanded synchron mit Panel', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+
+    expect(settingsButton).toHaveAttribute('aria-expanded', 'false');
+    expect(panel).toHaveAttribute('hidden');
+
+    await user.click(settingsButton);
+
+    expect(settingsButton).toHaveAttribute('aria-expanded', 'true');
+    expect(panel).not.toHaveAttribute('hidden');
+
+    await user.keyboard('{Escape}');
+
+    expect(settingsButton).toHaveAttribute('aria-expanded', 'false');
+    expect(panel).toHaveAttribute('hidden');
+  });
+
+  test('Lautstärke: aria-expanded wechselt synchron mit Slider-Sichtbarkeit', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const sliderContainer = document.getElementById('volume-slider');
+
+    expect(volumeButton).toHaveAttribute('aria-expanded', 'false');
+    expect(sliderContainer).toHaveAttribute('hidden');
+
+    await user.click(volumeButton);
+
+    expect(volumeButton).toHaveAttribute('aria-expanded', 'true');
+    expect(sliderContainer).not.toHaveAttribute('hidden');
+
+    await user.click(volumeButton);
+
+    expect(volumeButton).toHaveAttribute('aria-expanded', 'false');
+    expect(sliderContainer).toHaveAttribute('hidden');
+  });
+});
+
 describe('Settings-Panel Fokus-Loop (IMP-26)', () => {
   beforeEach(async () => {
     jest.resetModules();
