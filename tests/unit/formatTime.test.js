@@ -65,3 +65,36 @@ describe('formatTime (IMP-11U-A)', () => {
     });
   });
 });
+
+describe('formatTimeForAriaWithDuration (IMP-30)', () => {
+  let formatTimeForAriaWithDuration;
+
+  beforeAll(async () => {
+    const module = await import('../../src/js/utils/formatTime.js');
+    formatTimeForAriaWithDuration = module.formatTimeForAriaWithDuration;
+  });
+
+  test('formatiert Position und Dauer im WCAG-Format', () => {
+    expect(formatTimeForAriaWithDuration(154, 615)).toBe(
+      '2 Minuten 34 Sekunden von 10 Minuten 15 Sekunden'
+    );
+  });
+
+  test('formatiert 0 Sekunden korrekt', () => {
+    expect(formatTimeForAriaWithDuration(0, 615)).toBe(
+      '0 Sekunden von 10 Minuten 15 Sekunden'
+    );
+  });
+
+  test('formatiert nur Sekunden (unter 1 Minute)', () => {
+    expect(formatTimeForAriaWithDuration(5, 120)).toBe(
+      '5 Sekunden von 2 Minuten 0 Sekunden'
+    );
+  });
+
+  test('formatiert mit Stunde in Dauer', () => {
+    expect(formatTimeForAriaWithDuration(90, 3661)).toBe(
+      '1 Minute 30 Sekunden von 1 Stunde 1 Minute 1 Sekunde'
+    );
+  });
+});

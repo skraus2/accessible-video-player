@@ -33,3 +33,13 @@ export function formatTimeForAria(seconds) {
 
   return parts.join(' ');
 }
+
+/**
+ * IMP-30: Formatiert Timeline-aria-valuetext mit aktueller Position und Dauer.
+ * @param {number} current - Aktuelle Position in Sekunden
+ * @param {number} duration - Gesamtdauer in Sekunden
+ * @returns {string} z. B. "2 Minuten 34 Sekunden von 10 Minuten 15 Sekunden"
+ */
+export function formatTimeForAriaWithDuration(current, duration) {
+  return `${formatTimeForAria(current)} von ${formatTimeForAria(duration)}`;
+}

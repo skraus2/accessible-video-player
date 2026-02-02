@@ -269,7 +269,11 @@ describe('Timeline-Slider Integration (IMP-20I-C)', () => {
 
     expect(video.currentTime).toBe(154);
     expect(slider).toHaveAttribute('aria-valuenow', '154');
-    expect(slider).toHaveAttribute('aria-valuetext', '2 Minuten 34 Sekunden');
+    // IMP-30: aria-valuetext mit Position und Dauer (WCAG 4.1.2)
+    expect(slider).toHaveAttribute(
+      'aria-valuetext',
+      '2 Minuten 34 Sekunden von 10 Minuten 15 Sekunden'
+    );
   });
 
   test('Zeitanzeige zeigt formatierte Zeit (formatTime-Integration)', () => {
@@ -306,6 +310,11 @@ describe('Timeline-Slider via Tastatur (IMP-23)', () => {
 
     expect(video.currentTime).toBe(5);
     expect(slider).toHaveAttribute('aria-valuenow', '5');
+    // IMP-30: SR sagt neuen aria-valuetext bei Wertänderung an
+    expect(slider).toHaveAttribute(
+      'aria-valuetext',
+      '5 Sekunden von 10 Minuten 15 Sekunden'
+    );
   });
 
   test('Pfeil-Links (←) springt 5 Sekunden zurück', async () => {

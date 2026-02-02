@@ -1,7 +1,11 @@
 /**
  * Einstiegspunkt für den barrierefreien Video-Player (ES-Modul).
  */
-import { formatTime, formatTimeForAria } from './utils/formatTime.js';
+import {
+  formatTime,
+  formatTimeForAria,
+  formatTimeForAriaWithDuration,
+} from './utils/formatTime.js';
 import { togglePlayPause } from './utils/togglePlayPause.js';
 import {
   toggleCaptions,
@@ -73,6 +77,17 @@ function initTimelineControls() {
 
   if (!video || !slider || !timeCurrent || !timeDuration) return;
 
+  /** IMP-30: Aktualisiert aria-valuenow und aria-valuetext (WCAG 4.1.2) */
+  function updateTimelineAria(slider, currentTime, duration) {
+    const current = Math.floor(currentTime);
+    const dur = Math.floor(duration) || 0;
+    slider.setAttribute('aria-valuenow', String(current));
+    slider.setAttribute(
+      'aria-valuetext',
+      formatTimeForAriaWithDuration(current, dur)
+    );
+  }
+
   function updateTimeDisplay() {
     const current = Math.floor(video.currentTime);
     const duration = Math.floor(video.duration) || 0;
@@ -80,8 +95,7 @@ function initTimelineControls() {
     timeCurrent.textContent = formatTime(current);
     timeDuration.textContent = formatTime(duration);
 
-    slider.setAttribute('aria-valuenow', String(current));
-    slider.setAttribute('aria-valuetext', formatTimeForAria(current));
+    updateTimelineAria(slider, current, duration);
   }
 
   const STEP_SECONDS = 5;
