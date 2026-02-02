@@ -94,7 +94,8 @@
 }
 
 .player-btn--play-pause:focus {
-  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline: var(--player-focus-outline-width-button) solid
+    var(--color-border-focus);
   outline-offset: 2px;
 }
 
@@ -103,7 +104,8 @@
 }
 
 .player-btn--play-pause:focus-visible {
-  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline: var(--player-focus-outline-width-button) solid
+    var(--color-border-focus);
   outline-offset: 2px;
 }
 
@@ -120,7 +122,8 @@
 }
 
 .player-btn--volume:focus-visible {
-  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline: var(--player-focus-outline-width-button) solid
+    var(--color-border-focus);
   outline-offset: 2px;
 }
 
@@ -145,7 +148,8 @@
 }
 
 .player-btn--secondary:focus-visible {
-  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline: var(--player-focus-outline-width-button) solid
+    var(--color-border-focus);
   outline-offset: 2px;
 }
 
@@ -171,6 +175,15 @@
   display: none !important;
 }
 
+/* IMP-10: Play/Pause – Icon-Switch über Button-State */
+.player-btn--play-pause.is-playing .player-btn__icon--play {
+  display: none;
+}
+
+.player-btn--play-pause.is-playing .player-btn__icon--pause {
+  display: inline-flex;
+}
+
 /* === IMP-04: Timeline-Slider (HTML + CSS, ohne Funktion) === */
 .player-timeline {
   flex: 1;
@@ -193,7 +206,8 @@
 }
 
 .player-range:focus-visible {
-  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline: var(--player-focus-outline-width-button) solid
+    var(--color-border-focus);
   outline-offset: 2px;
   border-radius: var(--player-radius);
 }
@@ -406,7 +420,8 @@
 }
 
 .player-btn--close:focus-visible {
-  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline: var(--player-focus-outline-width-button) solid
+    var(--color-border-focus);
   outline-offset: 2px;
 }
 
@@ -454,6 +469,7 @@
 }
 
 .player-settings__select:focus-visible {
-  outline: var(--player-focus-outline-width-button) solid var(--color-border-focus);
+  outline: var(--player-focus-outline-width-button) solid
+    var(--color-border-focus);
   outline-offset: 2px;
 }
