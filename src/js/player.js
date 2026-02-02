@@ -254,9 +254,50 @@ function initDescriptionsControls() {
   });
 }
 
+/**
+ * IMP-16: Settings-Button öffnet Settings-Panel
+ * - Click: Panel anzeigen, aria-expanded
+ * - Close-Button + Backdrop-Click: Panel schließen
+ */
+function initSettingsControls() {
+  const settingsButton = document.querySelector('.player-btn--settings');
+  const panel = document.getElementById('player-settings-panel');
+  const closeButton = panel?.querySelector('.player-btn--close');
+  const backdrop = panel?.querySelector('.player-settings__backdrop');
+
+  if (!settingsButton || !panel) return;
+
+  function openPanel() {
+    panel.removeAttribute('hidden');
+    settingsButton.setAttribute('aria-expanded', 'true');
+  }
+
+  function closePanel() {
+    panel.setAttribute('hidden', '');
+    settingsButton.setAttribute('aria-expanded', 'false');
+  }
+
+  settingsButton.addEventListener('click', () => {
+    openPanel();
+  });
+
+  if (closeButton) {
+    closeButton.addEventListener('click', () => {
+      closePanel();
+    });
+  }
+
+  if (backdrop) {
+    backdrop.addEventListener('click', () => {
+      closePanel();
+    });
+  }
+}
+
 // Init
 initPlayPauseControls();
 initTimelineControls();
 initVolumeControls();
 initCaptionsControls();
 initDescriptionsControls();
+initSettingsControls();
