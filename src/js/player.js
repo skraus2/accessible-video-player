@@ -84,10 +84,13 @@ function initTimelineControls() {
     slider.setAttribute('aria-valuetext', formatTimeForAria(current));
   }
 
+  const STEP_SECONDS = 5;
+
   function onMetadataLoaded() {
     const duration = Math.floor(video.duration);
     const max = Number.isFinite(duration) && duration > 0 ? duration : 100;
     slider.max = String(max);
+    slider.step = String(STEP_SECONDS);
     slider.value = String(Math.floor(video.currentTime));
     updateTimeDisplay();
   }
@@ -109,6 +112,37 @@ function initTimelineControls() {
     const value = Number(slider.value);
     if (Number.isFinite(value) && value >= 0) {
       video.currentTime = value;
+    }
+  });
+
+  // IMP-23: Pfeiltasten, Home, End (WCAG 2.1.1) – explizit für Zuverlässigkeit/Testbarkeit
+  slider.addEventListener('keydown', e => {
+    const max = Number(slider.max) || 100;
+    let value = Number(slider.value) || 0;
+    const step = Number(slider.step) || STEP_SECONDS;
+
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      value = Math.min(value + step, max);
+      slider.value = String(value);
+      video.currentTime = value;
+      updateTimeDisplay();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      value = Math.max(value - step, 0);
+      slider.value = String(value);
+      video.currentTime = value;
+      updateTimeDisplay();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      slider.value = '0';
+      video.currentTime = 0;
+      updateTimeDisplay();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      slider.value = String(max);
+      video.currentTime = max;
+      updateTimeDisplay();
     }
   });
 }

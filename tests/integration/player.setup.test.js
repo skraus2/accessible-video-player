@@ -287,6 +287,80 @@ describe('Timeline-Slider Integration (IMP-20I-C)', () => {
   });
 });
 
+describe('Timeline-Slider via Tastatur (IMP-23)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupTimelineVideoMock(615);
+    await import('../../src/js/player.js');
+  });
+
+  test('Pfeil-Rechts (→) springt 5 Sekunden vor', async () => {
+    const user = userEvent.setup();
+    const slider = screen.getByRole('slider', { name: 'Videoposition' });
+    const video = document.getElementById('player-video');
+
+    slider.focus();
+    await user.keyboard('{ArrowRight}');
+
+    expect(video.currentTime).toBe(5);
+    expect(slider).toHaveAttribute('aria-valuenow', '5');
+  });
+
+  test('Pfeil-Links (←) springt 5 Sekunden zurück', async () => {
+    const user = userEvent.setup();
+    const slider = screen.getByRole('slider', { name: 'Videoposition' });
+    const video = document.getElementById('player-video');
+
+    slider.value = '20';
+    slider.focus();
+    await user.keyboard('{ArrowLeft}');
+
+    expect(video.currentTime).toBe(15);
+  });
+
+  test('Home springt zu 0:00', async () => {
+    const user = userEvent.setup();
+    const slider = screen.getByRole('slider', { name: 'Videoposition' });
+    const video = document.getElementById('player-video');
+
+    slider.value = '100';
+    fireEvent.input(slider);
+    expect(video.currentTime).toBe(100);
+
+    slider.focus();
+    await user.keyboard('{Home}');
+
+    expect(video.currentTime).toBe(0);
+    expect(slider).toHaveAttribute('aria-valuenow', '0');
+  });
+
+  test('End springt zu Videoende', async () => {
+    const user = userEvent.setup();
+    const slider = screen.getByRole('slider', { name: 'Videoposition' });
+    const video = document.getElementById('player-video');
+
+    slider.focus();
+    await user.keyboard('{End}');
+
+    expect(video.currentTime).toBe(615);
+    expect(slider).toHaveAttribute('aria-valuenow', '615');
+  });
+
+  test('Pfeil-Rechts am Ende überschreitet Videoende nicht', async () => {
+    const user = userEvent.setup();
+    const slider = screen.getByRole('slider', { name: 'Videoposition' });
+    const video = document.getElementById('player-video');
+
+    slider.value = '615';
+    slider.focus();
+    await user.keyboard('{ArrowRight}');
+
+    expect(video.currentTime).toBe(615);
+  });
+});
+
 describe('Settings-Panel Integration (IMP-20I-D)', () => {
   beforeEach(async () => {
     jest.resetModules();
