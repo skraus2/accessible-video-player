@@ -30,6 +30,19 @@
   vertical-align: middle;
 }
 
+/* IMP-38: Untertitel-Styling (WCAG 1.4.3 Kontrast, 1.2.2 Lesbarkeit) */
+.player-video-area video::cue {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  font-size: 1.125rem; /* 18px – WCAG Mindestgröße */
+  font-weight: 500;
+  line-height: 1.4;
+  /* Leichter Schatten für Kanten auf variierenden Video-Hintergründen */
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 1),
+    0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
 /* === Controls-Bereich (Haupt- + Sekundärleiste) === */
 .player-controls {
   display: flex;
