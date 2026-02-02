@@ -94,17 +94,67 @@ function initTimelineControls() {
 }
 
 /**
- * IMP-12: Lautstärke-Button öffnet/schließt Lautstärke-Slider
- * - Click: Toggle Sichtbarkeit, aria-expanded
- * - Optional: Klick außerhalb schließt Slider
+ * IMP-12 + IMP-13: Lautstärke-Button/Slider
+ * - Button: Toggle Sichtbarkeit, aria-expanded
+ * - Slider: video.volume = value/100, Sync, Initial 70%
+ * - Optional: Mute-Icon bei volume = 0
  */
 function initVolumeControls() {
+  const video = /** @type {HTMLVideoElement | null} */ (
+    document.getElementById('player-video')
+  );
   const button = /** @type {HTMLButtonElement | null} */ (
     document.querySelector('.player-btn--volume')
   );
-  const slider = document.getElementById('volume-slider');
+  const sliderContainer = document.getElementById('volume-slider');
+  const slider = /** @type {HTMLInputElement | null} */ (
+    document.getElementById('player-volume-input')
+  );
 
-  if (!button || !slider) return;
+  if (!video || !button || !sliderContainer || !slider) return;
+
+  const volumeIcon = button.querySelector('.player-btn__icon--volume');
+  const muteIcon = button.querySelector('.player-btn__icon--mute');
+
+  const INITIAL_VOLUME = 0.7;
+
+  function syncVolumeToUI() {
+    const vol = video ? video.volume : INITIAL_VOLUME;
+    const pct = Math.round(vol * 100);
+    slider.value = String(pct);
+
+    if (volumeIcon && muteIcon) {
+      if (vol === 0) {
+        volumeIcon.setAttribute('hidden', '');
+        muteIcon.removeAttribute('hidden');
+      } else {
+        volumeIcon.removeAttribute('hidden');
+        muteIcon.setAttribute('hidden', '');
+      }
+    }
+  }
+
+  function setVolume(value) {
+    const pct = Math.max(0, Math.min(100, Number(value)));
+    const vol = pct / 100;
+    video.volume = vol;
+    syncVolumeToUI();
+  }
+
+  // Initial: 70%
+  if (video) {
+    video.volume = INITIAL_VOLUME;
+  }
+  slider.value = String(Math.round(INITIAL_VOLUME * 100));
+  syncVolumeToUI();
+
+  if (video) {
+    video.addEventListener('volumechange', syncVolumeToUI);
+  }
+
+  slider.addEventListener('input', () => {
+    setVolume(slider.value);
+  });
 
   function isExpanded() {
     return button.getAttribute('aria-expanded') === 'true';
@@ -113,9 +163,9 @@ function initVolumeControls() {
   function setExpanded(expanded) {
     button.setAttribute('aria-expanded', String(expanded));
     if (expanded) {
-      slider.removeAttribute('hidden');
+      sliderContainer.removeAttribute('hidden');
     } else {
-      slider.setAttribute('hidden', '');
+      sliderContainer.setAttribute('hidden', '');
     }
   }
 
@@ -130,7 +180,6 @@ function initVolumeControls() {
     setExpanded(!isExpanded());
   });
 
-  // Optional: Klick außerhalb schließt Slider
   document.addEventListener('click', e => {
     const volume = button.closest('.player-volume');
     if (volume && !volume.contains(/** @type {Node} */ (e.target))) {

@@ -131,6 +131,12 @@
   outline: none;
 }
 
+/* IMP-13: Volume/Mute-Icon Toggle – nur eines sichtbar */
+.player-btn__icon--volume[hidden],
+.player-btn__icon--mute[hidden] {
+  display: none !important;
+}
+
 /* IMP-07: Sekundär-Controls – 44×44px, Fokus-Indikator (CC, AD, Settings, Fullscreen) */
 .player-btn--secondary {
   min-width: var(--player-touch-target);
