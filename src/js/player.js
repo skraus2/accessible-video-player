@@ -476,6 +476,7 @@ function initSettingsControls() {
     const first = panelFocusables[0];
     const last = panelFocusables[panelFocusables.length - 1];
     const activeEl = document.activeElement;
+    const activeIndex = panelFocusables.indexOf(activeEl);
 
     if (e.shiftKey) {
       // Shift+Tab vom ersten Element → letztes
@@ -488,6 +489,13 @@ function initSettingsControls() {
       if (activeEl === last) {
         e.preventDefault();
         first.focus();
+      } else if (
+        activeIndex >= 0 &&
+        activeIndex === panelFocusables.length - 2
+      ) {
+        // Tab vom vorletzten → letztes (DOM-Reihenfolge könnte sonst aus Panel führen)
+        e.preventDefault();
+        last.focus();
       }
     }
   });

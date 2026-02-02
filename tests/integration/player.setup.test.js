@@ -707,6 +707,35 @@ describe('Settings-Panel Fokus-Loop (IMP-26)', () => {
     expect(panel).toHaveAttribute('hidden');
     expect(settingsButton).toHaveFocus();
   });
+
+  test('IMP-29I-B: Fokus zirkuliert im Settings-Panel, ESC schließt', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+    const speedSelect = screen.getByLabelText('Wiedergabegeschwindigkeit');
+    const qualitySelect = screen.getByLabelText('Videoqualität');
+    const closeButton = panel?.querySelector('.player-btn--close');
+
+    await user.click(settingsButton);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    expect(speedSelect).toHaveFocus();
+
+    await user.tab();
+    expect(document.activeElement).toBe(qualitySelect);
+
+    await user.tab();
+    expect(document.activeElement).toBe(closeButton);
+
+    await user.tab();
+    expect(speedSelect).toHaveFocus();
+
+    await user.keyboard('{Escape}');
+    expect(panel).toHaveAttribute('hidden');
+    expect(settingsButton).toHaveFocus();
+  });
 });
 
 describe('Live-Region Status-Updates (IMP-20I-E)', () => {
