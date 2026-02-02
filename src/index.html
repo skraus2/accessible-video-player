@@ -79,20 +79,43 @@
             aria-label="Abspielen"
             title="Abspielen"
           >
-            <span class="player-btn__icon player-btn__icon--play" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <span
+              class="player-btn__icon player-btn__icon--play"
+              aria-hidden="true"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
+              >
                 <path d="M8 5v14l11-7L8 5z" />
               </svg>
             </span>
-            <span class="player-btn__icon player-btn__icon--pause" aria-hidden="true" hidden>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+            <span
+              class="player-btn__icon player-btn__icon--pause"
+              aria-hidden="true"
+              hidden
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
+              >
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
               </svg>
             </span>
           </button>
           <!-- IMP-04: Timeline-Slider (HTML + CSS, ohne Funktion), WCAG 1.3.1, 2.5.8, 2.4.7 -->
           <div class="player-timeline">
-            <label for="player-timeline-input" class="sr-only">Videoposition</label>
+            <label for="player-timeline-input" class="sr-only"
+              >Videoposition</label
+            >
             <input
               type="range"
               id="player-timeline-input"
@@ -108,9 +131,13 @@
           </div>
           <!-- IMP-05: Zeitanzeige (Current / Duration, statisch), WCAG 1.4.3, 1.3.1 -->
           <div class="player-time" aria-hidden="true">
-            <span class="player-time__current" id="player-time-current">0:00</span>
+            <span class="player-time__current" id="player-time-current"
+              >0:00</span
+            >
             <span class="player-time__separator"> / </span>
-            <span class="player-time__duration" id="player-time-duration">0:00</span>
+            <span class="player-time__duration" id="player-time-duration"
+              >0:00</span
+            >
           </div>
           <!-- IMP-06: Lautstärke-Button und -Slider (HTML + CSS, ohne Funktion), WCAG 1.1.1, 1.3.1, 2.5.8, 2.4.7, 4.1.2 -->
           <div class="player-volume">
@@ -123,13 +150,24 @@
               title="Lautstärke"
             >
               <span class="player-btn__icon" aria-hidden="true">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
+                  />
                 </svg>
               </span>
             </button>
             <div id="volume-slider" class="player-volume__slider" hidden>
-              <label for="player-volume-input" class="sr-only">Lautstärke</label>
+              <label for="player-volume-input" class="sr-only"
+                >Lautstärke</label
+              >
               <input
                 type="range"
                 id="player-volume-input"
@@ -143,7 +181,9 @@
             </div>
           </div>
         </div>
-        <span class="sr-only">Sekundärleiste: Untertitel und Einstellungen</span>
+        <span class="sr-only"
+          >Sekundärleiste: Untertitel und Einstellungen</span
+        >
         <div class="player-bar player-bar--secondary" role="presentation">
           <!-- IMP-07: Sekundär-Controls (CC, AD, Settings, Fullscreen), WCAG 1.1.1, 2.5.8, 2.4.7, 4.1.2 -->
           <button
@@ -154,8 +194,17 @@
             title="Untertitel"
           >
             <span class="player-btn__icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-                <path d="M19 4H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H5V6h14v12zM7 15h3v-1.5H8.5v-1H10v-1H7v4zm5-1.5h1v2h1.5v-2H16v-1h-4v1.5zM12 10h1v1h-1v-1z"/>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M19 4H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H5V6h14v12zM7 15h3v-1.5H8.5v-1H10v-1H7v4zm5-1.5h1v2h1.5v-2H16v-1h-4v1.5zM12 10h1v1h-1v-1z"
+                />
               </svg>
             </span>
           </button>
@@ -167,8 +216,17 @@
             title="Audiodeskription"
           >
             <span class="player-btn__icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
+                />
               </svg>
             </span>
           </button>
@@ -181,8 +239,17 @@
             title="Einstellungen"
           >
             <span class="player-btn__icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-                <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+                />
               </svg>
             </span>
           </button>
@@ -194,13 +261,30 @@
             title="Vollbild aktivieren"
           >
             <span class="player-btn__icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"
+                />
               </svg>
             </span>
           </button>
         </div>
       </div>
+      <!-- IMP-09: Live-Region für Statusmeldungen (WCAG 4.1.3) -->
+      <div
+        id="player-status"
+        class="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      ></div>
     </section>
 
     <!-- IMP-08: Settings-Panel (HTML + CSS, initial versteckt), WCAG 1.3.1, 2.4.6, 4.1.2 -->
@@ -215,7 +299,9 @@
       <div class="player-settings__backdrop"></div>
       <div class="player-settings__content">
         <div class="player-settings__header">
-          <h2 id="settings-heading" class="player-settings__title">Einstellungen</h2>
+          <h2 id="settings-heading" class="player-settings__title">
+            Einstellungen
+          </h2>
           <button
             type="button"
             class="player-btn player-btn--close"
@@ -223,8 +309,17 @@
             title="Einstellungen schließen"
           >
             <span class="player-btn__icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
-                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                />
               </svg>
             </span>
           </button>
