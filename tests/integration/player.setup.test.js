@@ -425,6 +425,51 @@ describe('Lautstärke-Slider via Tastatur (IMP-24)', () => {
   });
 });
 
+describe('Lautstärke-Slider aria-valuetext (IMP-31)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  test('Lautstärke-Slider hat aria-valuetext mit Prozent (WCAG 4.1.2)', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const volumeSlider = document.getElementById('player-volume-input');
+
+    await user.click(volumeButton);
+
+    expect(volumeSlider).toHaveAttribute('aria-valuetext', '70 Prozent');
+  });
+
+  test('Pfeil-Hoch aktualisiert aria-valuetext auf 75 Prozent', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const volumeSlider = document.getElementById('player-volume-input');
+
+    await user.click(volumeButton);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    volumeSlider.focus();
+    await user.keyboard('{ArrowUp}');
+
+    expect(volumeSlider).toHaveAttribute('aria-valuetext', '75 Prozent');
+  });
+
+  test('Pfeil-Runter aktualisiert aria-valuetext auf 65 Prozent', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const volumeSlider = document.getElementById('player-volume-input');
+
+    await user.click(volumeButton);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    volumeSlider.focus();
+    await user.keyboard('{ArrowDown}');
+
+    expect(volumeSlider).toHaveAttribute('aria-valuetext', '65 Prozent');
+  });
+});
+
 describe('Lautstärke-Slider Fokus-Management (IMP-28)', () => {
   beforeEach(async () => {
     jest.resetModules();

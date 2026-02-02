@@ -176,6 +176,8 @@ function initVolumeControls() {
     const vol = video ? video.volume : INITIAL_VOLUME;
     const pct = Math.round(vol * 100);
     slider.value = String(pct);
+    // IMP-31: aria-valuetext für SR (WCAG 4.1.2) – „70 Prozent" statt nur „70"
+    slider.setAttribute('aria-valuetext', `${pct} Prozent`);
 
     if (volumeIcon && muteIcon) {
       if (vol === 0) {
