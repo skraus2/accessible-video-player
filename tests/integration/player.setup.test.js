@@ -224,6 +224,82 @@ describe('Timeline-Slider Integration (IMP-20I-C)', () => {
   });
 });
 
+describe('Settings-Panel Integration (IMP-20I-D)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  test('Settings-Panel öffnet bei Button-Click mit aria-expanded', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+
+    expect(panel).toHaveAttribute('hidden');
+
+    await user.click(settingsButton);
+
+    expect(panel).not.toHaveAttribute('hidden');
+    expect(settingsButton).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test('Settings-Panel öffnet und Fokus auf erstem Element', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const speedSelect = screen.getByLabelText('Wiedergabegeschwindigkeit');
+
+    await user.click(settingsButton);
+
+    // requestAnimationFrame für Fokus – kurz warten
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    expect(speedSelect).toHaveFocus();
+  });
+
+  test('ESC schließt Panel und setzt Fokus zurück auf Settings-Button', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+
+    await user.click(settingsButton);
+    expect(panel).not.toHaveAttribute('hidden');
+
+    await user.keyboard('{Escape}');
+
+    expect(panel).toHaveAttribute('hidden');
+    expect(settingsButton).toHaveAttribute('aria-expanded', 'false');
+    expect(settingsButton).toHaveFocus();
+  });
+
+  test('Close-Button schließt Panel und setzt Fokus zurück', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+
+    await user.click(settingsButton);
+    expect(panel).not.toHaveAttribute('hidden');
+
+    const closeButton = screen.getByRole('button', {
+      name: 'Einstellungen schließen',
+    });
+    await user.click(closeButton);
+
+    expect(panel).toHaveAttribute('hidden');
+    expect(settingsButton).toHaveAttribute('aria-expanded', 'false');
+    expect(settingsButton).toHaveFocus();
+  });
+});
+
 /** Mockt Video für Timeline-Tests (duration, readyState, currentTime) */
 function setupTimelineVideoMock(duration = 615) {
   const video = document.getElementById('player-video');

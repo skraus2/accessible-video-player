@@ -307,26 +307,36 @@ function initFullscreenControls() {
 }
 
 /**
- * IMP-16 + IMP-17: Settings-Panel öffnen/schließen
- * - Click Settings: Panel anzeigen, aria-expanded
- * - Close-Button, Backdrop-Click, ESC: Panel schließen
+ * IMP-16 + IMP-17 + IMP-25: Settings-Panel öffnen/schließen + Fokus-Management
+ * - Click Settings: Panel anzeigen, aria-expanded, Fokus auf erstes Element
+ * - Close-Button, Backdrop-Click, ESC: Panel schließen, Fokus zurück
  */
 function initSettingsControls() {
   const settingsButton = document.querySelector('.player-btn--settings');
   const panel = document.getElementById('player-settings-panel');
   const closeButton = panel?.querySelector('.player-btn--close');
   const backdrop = panel?.querySelector('.player-settings__backdrop');
+  const speedSelect = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById('player-settings-speed')
+  );
 
   if (!settingsButton || !panel) return;
 
   function openPanel() {
     panel.removeAttribute('hidden');
     settingsButton.setAttribute('aria-expanded', 'true');
+    // IMP-25: Fokus auf erstes fokussierbares Element (WCAG 2.4.3)
+    const firstFocusable = speedSelect || closeButton;
+    if (firstFocusable) {
+      requestAnimationFrame(() => firstFocusable.focus());
+    }
   }
 
   function closePanel() {
     panel.setAttribute('hidden', '');
     settingsButton.setAttribute('aria-expanded', 'false');
+    // IMP-25: Fokus zurück auf Settings-Button (WCAG 2.4.3)
+    settingsButton.focus();
   }
 
   function isPanelOpen() {
@@ -358,9 +368,6 @@ function initSettingsControls() {
   // IMP-18: Wiedergabegeschwindigkeit ändern
   const video = /** @type {HTMLVideoElement | null} */ (
     document.getElementById('player-video')
-  );
-  const speedSelect = /** @type {HTMLSelectElement | null} */ (
-    document.getElementById('player-settings-speed')
   );
 
   if (video && speedSelect) {
