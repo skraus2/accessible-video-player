@@ -399,11 +399,11 @@ function initSettingsControls() {
 
   if (!settingsButton || !panel) return;
 
-  const panelFocusables = [
-    closeButton,
-    speedSelect,
-    document.getElementById('player-settings-quality'),
-  ].filter(Boolean);
+  const qualitySelect = document.getElementById('player-settings-quality');
+  // IMP-26: Tab-Reihenfolge im Panel – erstes = Speed-Select, letztes = Close-Button
+  const panelFocusables = [speedSelect, qualitySelect, closeButton].filter(
+    Boolean
+  );
 
   function setPanelInTabOrder(inTabOrder) {
     panelFocusables.forEach(el => {
@@ -463,6 +463,31 @@ function initSettingsControls() {
     }
   });
 
+  // IMP-26: Tab-Trap im Settings-Panel (WCAG 2.1.2 – erlaubte Tastaturfalle)
+  panel.addEventListener('keydown', e => {
+    if (e.key !== 'Tab' || !isPanelOpen() || panelFocusables.length === 0) {
+      return;
+    }
+
+    const first = panelFocusables[0];
+    const last = panelFocusables[panelFocusables.length - 1];
+    const activeEl = document.activeElement;
+
+    if (e.shiftKey) {
+      // Shift+Tab vom ersten Element → letztes
+      if (activeEl === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      // Tab vom letzten Element → erstes
+      if (activeEl === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
   // IMP-18: Wiedergabegeschwindigkeit ändern
   const video = /** @type {HTMLVideoElement | null} */ (
     document.getElementById('player-video')
@@ -504,9 +529,6 @@ function initSettingsControls() {
   }
 
   // IMP-19: Videoqualität ändern (Mock – echte Umsetzung erfordert HLS/DASH)
-  const qualitySelect = /** @type {HTMLSelectElement | null} */ (
-    document.getElementById('player-settings-quality')
-  );
   const statusEl = document.getElementById('player-status');
 
   if (qualitySelect) {

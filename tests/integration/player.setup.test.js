@@ -510,6 +510,71 @@ describe('Settings-Panel Integration (IMP-20I-D)', () => {
   });
 });
 
+describe('Settings-Panel Fokus-Loop (IMP-26)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  test('Tab vom letzten Element springt zu erstem Element', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+    const closeButton = panel?.querySelector('.player-btn--close');
+    const speedSelect = document.getElementById('player-settings-speed');
+
+    await user.click(settingsButton);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    closeButton?.focus();
+    expect(document.activeElement).toBe(closeButton);
+
+    await user.tab();
+
+    expect(document.activeElement).toBe(speedSelect);
+  });
+
+  test('Shift+Tab vom ersten Element springt zu letztem Element', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+    const closeButton = panel?.querySelector('.player-btn--close');
+    const speedSelect = document.getElementById('player-settings-speed');
+
+    await user.click(settingsButton);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    speedSelect?.focus();
+    expect(document.activeElement).toBe(speedSelect);
+
+    await user.tab({ shift: true });
+
+    expect(document.activeElement).toBe(closeButton);
+  });
+
+  test('ESC schließt Panel und befreit Fokus', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+
+    await user.click(settingsButton);
+    expect(panel).not.toHaveAttribute('hidden');
+
+    await user.keyboard('{Escape}');
+
+    expect(panel).toHaveAttribute('hidden');
+    expect(settingsButton).toHaveFocus();
+  });
+});
+
 describe('Live-Region Status-Updates (IMP-20I-E)', () => {
   beforeEach(async () => {
     jest.resetModules();
