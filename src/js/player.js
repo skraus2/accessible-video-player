@@ -7,6 +7,7 @@ import {
   toggleCaptions,
   syncCaptionsButtonState,
 } from './utils/toggleCaptions.js';
+import { announceStatus } from './utils/announceStatus.js';
 import {
   toggleDescriptions,
   syncDescriptionsButtonState,
@@ -35,12 +36,22 @@ function initPlayPauseControls() {
 
   // Button Click → Toggle
   button.addEventListener('click', () => {
-    togglePlayPause(video, button);
+    const result = togglePlayPause(video, button);
+    if (result.playing === true) {
+      announceStatus('Video wird abgespielt');
+    } else if (result.playing === false) {
+      announceStatus('Video pausiert');
+    }
   });
 
   // Optional: Click auf Video → Toggle (Maus/Touch)
   video.addEventListener('click', () => {
-    togglePlayPause(video, button);
+    const result = togglePlayPause(video, button);
+    if (result.playing === true) {
+      announceStatus('Video wird abgespielt');
+    } else if (result.playing === false) {
+      announceStatus('Video pausiert');
+    }
   });
 }
 
@@ -219,7 +230,15 @@ function initCaptionsControls() {
   }
 
   button.addEventListener('click', () => {
-    toggleCaptions(video, /** @type {HTMLButtonElement} */ (button));
+    const result = toggleCaptions(
+      video,
+      /** @type {HTMLButtonElement} */ (button)
+    );
+    if (result.enabled) {
+      announceStatus('Untertitel aktiviert');
+    } else {
+      announceStatus('Untertitel deaktiviert');
+    }
   });
 }
 

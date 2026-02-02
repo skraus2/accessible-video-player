@@ -6,9 +6,8 @@ import { jest } from '@jest/globals';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { screen } from '@testing-library/dom';
+import { screen, fireEvent, waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { fireEvent } from '@testing-library/dom';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = join(__dirname, '../..');
@@ -297,6 +296,62 @@ describe('Settings-Panel Integration (IMP-20I-D)', () => {
     expect(panel).toHaveAttribute('hidden');
     expect(settingsButton).toHaveAttribute('aria-expanded', 'false');
     expect(settingsButton).toHaveFocus();
+  });
+});
+
+describe('Live-Region Status-Updates (IMP-20I-E)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupVideoMock();
+    setupCaptionsTrackMock();
+    await import('../../src/js/player.js');
+  });
+
+  test('Live-Region wird bei Play-Button-Click befüllt', () => {
+    const playButton = screen.getByRole('button', { name: 'Abspielen' });
+    const liveRegion = document.getElementById('player-status');
+
+    fireEvent.click(playButton);
+
+    expect(liveRegion).toHaveTextContent('Video wird abgespielt');
+  });
+
+  test('Live-Region wird nach 1 Sekunde geleert', async () => {
+    const playButton = screen.getByRole('button', { name: 'Abspielen' });
+    const liveRegion = document.getElementById('player-status');
+
+    fireEvent.click(playButton);
+    expect(liveRegion).toHaveTextContent('Video wird abgespielt');
+
+    await waitFor(
+      () => {
+        expect(liveRegion).toHaveTextContent('');
+      },
+      { timeout: 1500 }
+    );
+  });
+
+  test('Live-Region wird bei Untertitel-Toggle befüllt', () => {
+    const captionsButton = screen.getByRole('button', { name: 'Untertitel' });
+    const liveRegion = document.getElementById('player-status');
+
+    fireEvent.click(captionsButton);
+
+    expect(liveRegion).toHaveTextContent('Untertitel aktiviert');
+  });
+
+  test('Live-Region zeigt "Untertitel deaktiviert" bei zweitem Toggle', () => {
+    const captionsButton = screen.getByRole('button', { name: 'Untertitel' });
+    const liveRegion = document.getElementById('player-status');
+
+    fireEvent.click(captionsButton);
+    expect(liveRegion).toHaveTextContent('Untertitel aktiviert');
+
+    fireEvent.click(captionsButton);
+
+    expect(liveRegion).toHaveTextContent('Untertitel deaktiviert');
   });
 });
 
