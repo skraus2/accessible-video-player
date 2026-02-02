@@ -210,6 +210,25 @@ function initVolumeControls() {
     setVolume(slider.value);
   });
 
+  // IMP-24: Pfeiltasten (WCAG 2.1.1) – explizit für Zuverlässigkeit/Testbarkeit
+  const VOLUME_STEP = 5;
+  slider.addEventListener('keydown', e => {
+    const max = 100;
+    let value = Number(slider.value) || 0;
+
+    if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      value = Math.min(value + VOLUME_STEP, max);
+      slider.value = String(value);
+      setVolume(value);
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      value = Math.max(value - VOLUME_STEP, 0);
+      slider.value = String(value);
+      setVolume(value);
+    }
+  });
+
   function isExpanded() {
     return button.getAttribute('aria-expanded') === 'true';
   }

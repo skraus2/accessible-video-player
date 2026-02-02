@@ -361,6 +361,61 @@ describe('Timeline-Slider via Tastatur (IMP-23)', () => {
   });
 });
 
+describe('Lautstärke-Slider via Tastatur (IMP-24)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  test('Pfeil-Hoch (↑) erhöht Lautstärke', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const video = document.getElementById('player-video');
+
+    await user.click(volumeButton);
+
+    const volumeSlider = document.getElementById('player-volume-input');
+    volumeSlider.focus();
+    await user.keyboard('{ArrowUp}');
+
+    expect(Number(volumeSlider.value)).toBe(75);
+    expect(video.volume).toBeCloseTo(0.75);
+  });
+
+  test('Pfeil-Runter (↓) verringert Lautstärke', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const video = document.getElementById('player-video');
+
+    await user.click(volumeButton);
+
+    const volumeSlider = document.getElementById('player-volume-input');
+    volumeSlider.focus();
+    await user.keyboard('{ArrowDown}');
+
+    expect(Number(volumeSlider.value)).toBe(65);
+    expect(video.volume).toBeCloseTo(0.65);
+  });
+
+  test('Pfeil-Hoch am Maximum überschreitet 100 nicht', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const video = document.getElementById('player-video');
+
+    await user.click(volumeButton);
+
+    const volumeSlider = document.getElementById('player-volume-input');
+    volumeSlider.value = '100';
+    volumeSlider.focus();
+    await user.keyboard('{ArrowUp}');
+
+    expect(Number(volumeSlider.value)).toBe(100);
+    expect(video.volume).toBe(1);
+  });
+});
+
 describe('Settings-Panel Integration (IMP-20I-D)', () => {
   beforeEach(async () => {
     jest.resetModules();
