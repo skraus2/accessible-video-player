@@ -345,6 +345,27 @@ function initSettingsControls() {
       // localStorage nicht verfügbar
     }
   }
+
+  // IMP-19: Videoqualität ändern (Mock – echte Umsetzung erfordert HLS/DASH)
+  const qualitySelect = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById('player-settings-quality')
+  );
+  const statusEl = document.getElementById('player-status');
+
+  if (qualitySelect) {
+    qualitySelect.addEventListener('change', () => {
+      const value = qualitySelect.value;
+      const label =
+        qualitySelect.options[qualitySelect.selectedIndex]?.textContent ??
+        value;
+
+      console.log('[Player] Videoqualität gewechselt:', value, `(${label})`);
+
+      if (statusEl) {
+        statusEl.textContent = `Qualitätswechsel würde hier erfolgen (${label})`;
+      }
+    });
+  }
 }
 
 // Init
