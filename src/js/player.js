@@ -3,6 +3,10 @@
  */
 import { formatTime, formatTimeForAria } from './utils/formatTime.js';
 import { togglePlayPause } from './utils/togglePlayPause.js';
+import {
+  toggleCaptions,
+  syncCaptionsButtonState,
+} from './utils/toggleCaptions.js';
 
 if (typeof formatTime !== 'function') {
   throw new Error('formatTime sollte eine Funktion sein');
@@ -188,7 +192,34 @@ function initVolumeControls() {
   });
 }
 
+/**
+ * IMP-14: Untertitel-Button Funktionalität
+ * - Click: Toggle textTracks (captions) showing/hidden
+ * - aria-pressed, visuell hervorgehoben
+ */
+function initCaptionsControls() {
+  const video = /** @type {HTMLVideoElement | null} */ (
+    document.getElementById('player-video')
+  );
+  const button = document.querySelector('.player-btn--captions');
+
+  if (!video || !button) return;
+
+  video.addEventListener('loadedmetadata', () => {
+    syncCaptionsButtonState(video, /** @type {HTMLButtonElement} */ (button));
+  });
+
+  if (video.readyState >= 1) {
+    syncCaptionsButtonState(video, /** @type {HTMLButtonElement} */ (button));
+  }
+
+  button.addEventListener('click', () => {
+    toggleCaptions(video, /** @type {HTMLButtonElement} */ (button));
+  });
+}
+
 // Init
 initPlayPauseControls();
 initTimelineControls();
 initVolumeControls();
+initCaptionsControls();
