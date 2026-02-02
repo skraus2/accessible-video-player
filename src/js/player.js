@@ -238,9 +238,13 @@ function initVolumeControls() {
     if (expanded) {
       sliderContainer.removeAttribute('hidden');
       slider.removeAttribute('tabindex'); // IMP-21: In Tab-Sequenz wenn sichtbar
+      // IMP-28: Fokus auf Slider für sofortige Pfeiltasten-Bedienung (WCAG 2.4.3)
+      requestAnimationFrame(() => slider.focus());
     } else {
       sliderContainer.setAttribute('hidden', '');
       slider.setAttribute('tabindex', '-1'); // IMP-21: Nicht in Tab-Sequenz wenn versteckt
+      // IMP-28: Fokus zurück auf Button beim Schließen
+      button.focus();
     }
   }
 

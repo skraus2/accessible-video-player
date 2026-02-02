@@ -1,5 +1,12 @@
 # Tab-Reihenfolge (IMP-21)
 
+## IMP-28: Lautstärke-Slider Fokus-Entscheidung
+
+**Entscheidung:** Fokus auf Slider beim Öffnen (bessere UX – sofortige Pfeiltasten-Bedienung).
+
+- **Öffnen:** Lautstärke-Button klicken → Slider erscheint, Fokus springt auf Slider
+- **Schließen:** Backdrop-Klick oder erneuter Button-Klick → Fokus zurück auf Button
+
 ## Dokumentierter Tab-Pfad
 
 Die Tab-Reihenfolge folgt der visuellen Anordnung (links→rechts):

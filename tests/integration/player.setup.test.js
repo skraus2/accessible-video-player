@@ -416,6 +416,56 @@ describe('Lautstärke-Slider via Tastatur (IMP-24)', () => {
   });
 });
 
+describe('Lautstärke-Slider Fokus-Management (IMP-28)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  test('Lautstärke-Button öffnet Slider und setzt Fokus auf Slider', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const volumeSlider = document.getElementById('player-volume-input');
+
+    await user.click(volumeButton);
+
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    expect(volumeSlider).toHaveFocus();
+  });
+
+  test('Pfeiltasten funktionieren sofort nach Öffnen', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const volumeSlider = document.getElementById('player-volume-input');
+    const video = document.getElementById('player-video');
+
+    await user.click(volumeButton);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    await user.keyboard('{ArrowUp}');
+
+    expect(Number(volumeSlider.value)).toBe(75);
+    expect(video.volume).toBeCloseTo(0.75);
+  });
+
+  test('Schließen setzt Fokus zurück auf Button', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const volumeSlider = document.getElementById('player-volume-input');
+
+    await user.click(volumeButton);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    expect(volumeSlider).toHaveFocus();
+
+    await user.click(volumeButton);
+
+    expect(volumeButton).toHaveFocus();
+  });
+});
+
 describe('Settings-Panel Integration (IMP-20I-D)', () => {
   beforeEach(async () => {
     jest.resetModules();
