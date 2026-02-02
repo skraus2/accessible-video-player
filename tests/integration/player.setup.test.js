@@ -135,3 +135,67 @@ describe('Play/Pause Integration (IMP-20I-A)', () => {
     expect(pauseIcon).toHaveAttribute('hidden');
   });
 });
+
+describe('Untertitel-Toggle Integration (IMP-20I-B)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupCaptionsTrackMock();
+    await import('../../src/js/player.js');
+  });
+
+  test('Untertitel-Toggle ändert TextTrack und aria-pressed', () => {
+    const button = screen.getByRole('button', { name: 'Untertitel' });
+    const video = document.getElementById('player-video');
+    const captionsTrack = video.textTracks[0];
+
+    expect(captionsTrack.mode).toBe('hidden');
+
+    fireEvent.click(button);
+
+    expect(captionsTrack.mode).toBe('showing');
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+    expect(button).toHaveClass('player-btn--captions');
+  });
+
+  test('Zweiter Click deaktiviert Untertitel', () => {
+    const button = screen.getByRole('button', { name: 'Untertitel' });
+    const video = document.getElementById('player-video');
+    const captionsTrack = video.textTracks[0];
+
+    fireEvent.click(button);
+    expect(captionsTrack.mode).toBe('showing');
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+
+    fireEvent.click(button);
+
+    expect(captionsTrack.mode).toBe('hidden');
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('Button-Styling bei aktivierten Untertiteln (aria-pressed)', () => {
+    const button = screen.getByRole('button', { name: 'Untertitel' });
+
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+
+    fireEvent.click(button);
+
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+/** Mockt TextTrack für Captions (CC)-Tests (textTracks ist read-only in JSDOM) */
+function setupCaptionsTrackMock() {
+  const video = document.getElementById('player-video');
+  if (!video) return;
+
+  const captionsTrack = { mode: 'hidden', kind: 'captions' };
+  const mockTextTracks = [captionsTrack];
+
+  Object.defineProperty(video, 'textTracks', {
+    configurable: true,
+    enumerable: true,
+    get: () => mockTextTracks,
+  });
+}
