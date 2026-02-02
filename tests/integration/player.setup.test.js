@@ -866,6 +866,69 @@ describe('Tab-Reihenfolge (IMP-21)', () => {
   });
 });
 
+describe('Kompletter Tastatur-Workflow (IMP-29I-A)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  const TAB_ORDER = [
+    'Abspielen',
+    'Videoposition',
+    'Lautstärke',
+    'Untertitel',
+    'Audiodeskription',
+    'Einstellungen',
+    'Vollbild aktivieren',
+  ];
+
+  test('Tab-Sequenz durch alle Controls (vorwärts)', async () => {
+    const user = userEvent.setup();
+
+    for (const label of TAB_ORDER) {
+      await user.tab();
+      const focused = document.activeElement;
+      expect(focused?.getAttribute('aria-label')).toBe(label);
+    }
+  });
+
+  test('Shift+Tab rückwärts-Navigation', async () => {
+    const user = userEvent.setup();
+    const fullscreenButton = screen.getByRole('button', {
+      name: 'Vollbild aktivieren',
+    });
+
+    fullscreenButton.focus();
+
+    const reverseOrder = [...TAB_ORDER].reverse();
+    for (let i = 1; i < reverseOrder.length; i++) {
+      await user.tab({ shift: true });
+      expect(document.activeElement?.getAttribute('aria-label')).toBe(
+        reverseOrder[i]
+      );
+    }
+  });
+
+  test('Versteckte Elemente werden übersprungen (Lautstärke-Slider geschlossen)', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const volumeSlider = document.getElementById('player-volume-input');
+
+    await user.tab(); // Abspielen
+    await user.tab(); // Videoposition
+    await user.tab(); // Lautstärke-Button
+    expect(document.activeElement).toBe(volumeButton);
+
+    await user.tab(); // Sollte zu Untertitel springen (nicht Lautstärke-Slider)
+    expect(document.activeElement?.getAttribute('aria-label')).toBe(
+      'Untertitel'
+    );
+    expect(document.activeElement).not.toBe(volumeSlider);
+  });
+});
+
 /** Mockt Video für Timeline-Tests (duration, readyState, currentTime) */
 function setupTimelineVideoMock(duration = 615) {
   const video = document.getElementById('player-video');
