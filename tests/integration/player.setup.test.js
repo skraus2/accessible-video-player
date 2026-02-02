@@ -466,6 +466,72 @@ describe('Lautstärke-Slider Fokus-Management (IMP-28)', () => {
   });
 });
 
+describe('Globale Shortcuts M/F/C (IMP-29)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupVideoMock();
+    setupCaptionsTrackMock();
+    await import('../../src/js/player.js');
+  });
+
+  test('M-Taste bei Player-Fokus: Toggle Mute', async () => {
+    const user = userEvent.setup();
+    const playButton = screen.getByRole('button', { name: 'Abspielen' });
+    const video = document.getElementById('player-video');
+
+    playButton.focus();
+    expect(video.volume).toBeGreaterThan(0);
+
+    await user.keyboard('m');
+
+    expect(video.volume).toBe(0);
+
+    await user.keyboard('m');
+
+    expect(video.volume).toBeGreaterThan(0);
+  });
+
+  test('C-Taste bei Player-Fokus: Toggle Captions', async () => {
+    const user = userEvent.setup();
+    const playButton = screen.getByRole('button', { name: 'Abspielen' });
+    const video = document.getElementById('player-video');
+    const captionsTrack = video.textTracks[0];
+
+    playButton.focus();
+    expect(captionsTrack.mode).toBe('hidden');
+
+    await user.keyboard('c');
+
+    expect(captionsTrack.mode).toBe('showing');
+
+    await user.keyboard('c');
+
+    expect(captionsTrack.mode).toBe('hidden');
+  });
+
+  test('Fokus außerhalb Player: M/C funktionieren nicht', async () => {
+    const user = userEvent.setup();
+    const h1 = document.querySelector('h1');
+    const video = document.getElementById('player-video');
+    const captionsTrack = video.textTracks[0];
+
+    if (h1) {
+      h1.setAttribute('tabindex', '0');
+      h1.focus();
+    }
+    const volumeBefore = video.volume;
+    const captionsBefore = captionsTrack.mode;
+
+    await user.keyboard('m');
+    await user.keyboard('c');
+
+    expect(video.volume).toBe(volumeBefore);
+    expect(captionsTrack.mode).toBe(captionsBefore);
+  });
+});
+
 describe('Settings-Panel Integration (IMP-20I-D)', () => {
   beforeEach(async () => {
     jest.resetModules();

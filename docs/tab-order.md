@@ -29,3 +29,13 @@ Die Tab-Reihenfolge folgt der visuellen Anordnung (links→rechts):
 
 - Kein Element mit `tabindex > 0`
 - Shift+Tab funktioniert rückwärts in korrekter Reihenfolge
+
+## IMP-29: Globale Shortcuts (nur bei Player-Fokus)
+
+| Taste | Aktion             |
+| ----- | ------------------ |
+| M     | Mute/Unmute        |
+| F     | Vollbild ein/aus   |
+| C     | Untertitel ein/aus |
+
+Aktiv nur wenn Fokus in `.player-container` oder `.player-settings` (WCAG 2.1.4).

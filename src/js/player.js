@@ -551,6 +551,56 @@ function initSettingsControls() {
   }
 }
 
+/**
+ * IMP-29: Globale Shortcuts M/F/C nur bei Player-Fokus (WCAG 2.1.4)
+ * M: Mute, F: Fullscreen, C: Captions
+ */
+function initKeyboardShortcuts() {
+  const playerContainer = document.querySelector('.player-container');
+  const video = document.getElementById('player-video');
+  const captionsButton = document.querySelector('.player-btn--captions');
+
+  if (!playerContainer || !video) return;
+
+  let lastVolumeBeforeMute = 0.7;
+
+  function isFocusInPlayer() {
+    const el = document.activeElement;
+    return el?.closest('.player-container') || el?.closest('.player-settings');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!isFocusInPlayer()) return;
+
+    if (e.key === 'm' || e.key === 'M') {
+      e.preventDefault();
+      if (video.volume > 0) {
+        lastVolumeBeforeMute = video.volume;
+        video.volume = 0;
+      } else {
+        video.volume = lastVolumeBeforeMute;
+      }
+      video.dispatchEvent(new Event('volumechange'));
+    } else if (e.key === 'f' || e.key === 'F') {
+      e.preventDefault();
+      toggleFullscreen(/** @type {HTMLElement} */ (playerContainer));
+    } else if (e.key === 'c' || e.key === 'C') {
+      e.preventDefault();
+      if (captionsButton) {
+        const result = toggleCaptions(
+          video,
+          /** @type {HTMLButtonElement} */ (captionsButton)
+        );
+        if (result.enabled) {
+          announceStatus('Untertitel aktiviert');
+        } else {
+          announceStatus('Untertitel deaktiviert');
+        }
+      }
+    }
+  });
+}
+
 // Init
 initPlayPauseControls();
 initTimelineControls();
@@ -559,3 +609,4 @@ initCaptionsControls();
 initDescriptionsControls();
 initFullscreenControls();
 initSettingsControls();
+initKeyboardShortcuts();
