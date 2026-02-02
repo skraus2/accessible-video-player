@@ -10,7 +10,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
-    "test:unit": "jest tests/unit",
+    "test:unit": "jest --testPathPatterns=unit",
     "test:integration": "jest tests/integration --passWithNoTests",
     "test:coverage": "jest --coverage tests/unit tests/integration",
     "test:watch": "jest --watch",
