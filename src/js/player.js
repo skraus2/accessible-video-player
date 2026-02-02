@@ -302,6 +302,49 @@ function initSettingsControls() {
       closePanel();
     }
   });
+
+  // IMP-18: Wiedergabegeschwindigkeit ändern
+  const video = /** @type {HTMLVideoElement | null} */ (
+    document.getElementById('player-video')
+  );
+  const speedSelect = /** @type {HTMLSelectElement | null} */ (
+    document.getElementById('player-settings-speed')
+  );
+
+  if (video && speedSelect) {
+    const STORAGE_KEY = 'player-playback-rate';
+
+    function applySpeed(value) {
+      const rate = parseFloat(value);
+      if (Number.isFinite(rate) && rate > 0) {
+        video.playbackRate = rate;
+        speedSelect.value = String(rate);
+        try {
+          localStorage.setItem(STORAGE_KEY, String(rate));
+        } catch {
+          // localStorage nicht verfügbar
+        }
+      }
+    }
+
+    speedSelect.addEventListener('change', () => {
+      applySpeed(speedSelect.value);
+    });
+
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const rate = parseFloat(saved);
+        if (Number.isFinite(rate) && rate > 0) {
+          video.playbackRate = rate;
+          const option = speedSelect.querySelector(`option[value="${saved}"]`);
+          if (option) speedSelect.value = saved;
+        }
+      }
+    } catch {
+      // localStorage nicht verfügbar
+    }
+  }
 }
 
 // Init
