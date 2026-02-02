@@ -8,11 +8,9 @@
  * @param {string} className - Der Klassenname (ohne Punkt)
  * @returns {boolean} true wenn die Klasse vorhanden ist
  */
-function hasClass(element, className) {
+export function hasClass(element, className) {
   if (!element || typeof element.className !== 'string') {
     return false;
   }
   return element.className.split(/\s+/).includes(className);
 }
-
-module.exports = { hasClass };

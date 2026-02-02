@@ -2,9 +2,14 @@
  * IMP-11U: Unit Tests für CSS-Utilities
  * Testet .sr-only, CSS-Variablen, box-sizing, hasClass-Helper
  */
-const { readFileSync } = require('fs');
-const { join } = require('path');
-const { hasClass } = require('../utils/domHelpers.js');
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import { hasClass } from '../utils/domHelpers.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const projectRoot = join(__dirname, '../..');
 
