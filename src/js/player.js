@@ -184,10 +184,15 @@ function initVolumeControls() {
     button.setAttribute('aria-expanded', String(expanded));
     if (expanded) {
       sliderContainer.removeAttribute('hidden');
+      slider.removeAttribute('tabindex'); // IMP-21: In Tab-Sequenz wenn sichtbar
     } else {
       sliderContainer.setAttribute('hidden', '');
+      slider.setAttribute('tabindex', '-1'); // IMP-21: Nicht in Tab-Sequenz wenn versteckt
     }
   }
+
+  // IMP-21: Initial: Lautstärke-Slider versteckt → tabindex="-1"
+  slider.setAttribute('tabindex', '-1');
 
   function closeSlider() {
     if (isExpanded()) {
@@ -341,9 +346,26 @@ function initSettingsControls() {
 
   if (!settingsButton || !panel) return;
 
+  const panelFocusables = [
+    closeButton,
+    speedSelect,
+    document.getElementById('player-settings-quality'),
+  ].filter(Boolean);
+
+  function setPanelInTabOrder(inTabOrder) {
+    panelFocusables.forEach(el => {
+      if (inTabOrder) {
+        el.removeAttribute('tabindex');
+      } else {
+        el.setAttribute('tabindex', '-1');
+      }
+    });
+  }
+
   function openPanel() {
     panel.removeAttribute('hidden');
     settingsButton.setAttribute('aria-expanded', 'true');
+    setPanelInTabOrder(true); // IMP-21: Panel-Elemente in Tab-Sequenz
     // IMP-25: Fokus auf erstes fokussierbares Element (WCAG 2.4.3)
     const firstFocusable = speedSelect || closeButton;
     if (firstFocusable) {
@@ -354,9 +376,13 @@ function initSettingsControls() {
   function closePanel() {
     panel.setAttribute('hidden', '');
     settingsButton.setAttribute('aria-expanded', 'false');
+    setPanelInTabOrder(false); // IMP-21: Panel-Elemente nicht in Tab-Sequenz
     // IMP-25: Fokus zurück auf Settings-Button (WCAG 2.4.3)
     settingsButton.focus();
   }
+
+  // IMP-21: Initial: Settings-Panel versteckt → tabindex="-1" auf allen Fokussierbaren
+  setPanelInTabOrder(false);
 
   function isPanelOpen() {
     return !panel.hasAttribute('hidden');

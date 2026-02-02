@@ -355,6 +355,107 @@ describe('Live-Region Status-Updates (IMP-20I-E)', () => {
   });
 });
 
+describe('Tab-Reihenfolge (IMP-21)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  /** Liefert fokussierbare Elemente in Tab-Reihenfolge (ohne versteckte) */
+  function getFocusableInTabOrder(container) {
+    const selector =
+      'button:not([tabindex="-1"]), input:not([tabindex="-1"]), select:not([tabindex="-1"])';
+    const elements = Array.from(container.querySelectorAll(selector));
+    return elements.filter(el => {
+      let node = el;
+      while (node && node !== container) {
+        if (node.hasAttribute?.('hidden')) return false;
+        node = node.parentElement;
+      }
+      return true;
+    });
+  }
+
+  const EXPECTED_TAB_ORDER = [
+    'Abspielen', // Play/Pause
+    'Videoposition', // Timeline
+    'Lautstärke', // Volume Button
+    'Untertitel', // CC
+    'Audiodeskription', // AD
+    'Einstellungen', // Settings
+    'Vollbild aktivieren', // Fullscreen
+  ];
+
+  test('Tab-Reihenfolge folgt visueller Anordnung (links→rechts)', () => {
+    const container = document.querySelector('.player-container');
+    const focusable = getFocusableInTabOrder(container);
+
+    const labels = focusable.map(el => el.getAttribute('aria-label') ?? '');
+
+    expect(focusable.length).toBe(EXPECTED_TAB_ORDER.length);
+    expect(labels).toEqual(EXPECTED_TAB_ORDER);
+  });
+
+  test('Versteckte Elemente (Lautstärke-Slider, Settings-Panel) sind nicht in Tab-Sequenz', () => {
+    const container = document.querySelector('.player-container');
+    const focusable = getFocusableInTabOrder(container);
+
+    const volumeSlider = document.getElementById('player-volume-input');
+    const settingsPanel = document.getElementById('player-settings-panel');
+
+    expect(focusable).not.toContain(volumeSlider);
+    expect(settingsPanel?.hasAttribute('hidden')).toBe(true);
+    expect(focusable.some(el => settingsPanel?.contains(el))).toBe(false);
+  });
+
+  test('Kein Element mit tabindex > 0', () => {
+    const container = document.querySelector('.player-container');
+    const withPositiveTabindex = container.querySelectorAll('[tabindex]');
+    withPositiveTabindex.forEach(el => {
+      const val = parseInt(el.getAttribute('tabindex') ?? '', 10);
+      expect(val <= 0 || Number.isNaN(val)).toBe(true);
+    });
+  });
+
+  test('Lautstärke-Slider in Tab-Sequenz wenn sichtbar', async () => {
+    const user = userEvent.setup();
+    const volumeButton = screen.getByRole('button', { name: 'Lautstärke' });
+    const volumeSlider = document.getElementById('player-volume-input');
+
+    await user.click(volumeButton);
+
+    const container = document.querySelector('.player-container');
+    const focusable = getFocusableInTabOrder(container);
+
+    expect(focusable).toContain(volumeSlider);
+  });
+
+  test('Tab-Walkthrough: Fokus-Reihenfolge per Tastatur', async () => {
+    const user = userEvent.setup();
+    const playButton = screen.getByRole('button', { name: 'Abspielen' });
+
+    playButton.focus();
+    expect(document.activeElement).toBe(playButton);
+
+    await user.tab();
+    expect(document.activeElement?.getAttribute('aria-label')).toBe(
+      'Videoposition'
+    );
+
+    await user.tab();
+    expect(document.activeElement?.getAttribute('aria-label')).toBe(
+      'Lautstärke'
+    );
+
+    await user.tab();
+    expect(document.activeElement?.getAttribute('aria-label')).toBe(
+      'Untertitel'
+    );
+  });
+});
+
 /** Mockt Video für Timeline-Tests (duration, readyState, currentTime) */
 function setupTimelineVideoMock(duration = 615) {
   const video = document.getElementById('player-video');
