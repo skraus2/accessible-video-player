@@ -430,7 +430,7 @@ function initSettingsControls() {
     panel.setAttribute('hidden', '');
     settingsButton.setAttribute('aria-expanded', 'false');
     setPanelInTabOrder(false); // IMP-21: Panel-Elemente nicht in Tab-Sequenz
-    // IMP-25: Fokus zurück auf Settings-Button (WCAG 2.4.3)
+    // IMP-25 + IMP-27: Fokus zurück auf Settings-Button (WCAG 2.4.3, 3.2.1)
     settingsButton.focus();
   }
 

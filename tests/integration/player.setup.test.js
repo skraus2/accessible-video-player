@@ -508,6 +508,24 @@ describe('Settings-Panel Integration (IMP-20I-D)', () => {
     expect(settingsButton).toHaveAttribute('aria-expanded', 'false');
     expect(settingsButton).toHaveFocus();
   });
+
+  test('IMP-27: Tab zu Close-Button, Enter → Fokus zurück auf Settings-Button', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+    const panel = document.getElementById('player-settings-panel');
+    const closeButton = panel?.querySelector('.player-btn--close');
+
+    await user.click(settingsButton);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    closeButton?.focus();
+    await user.keyboard('{Enter}');
+
+    expect(panel).toHaveAttribute('hidden');
+    expect(settingsButton).toHaveFocus();
+  });
 });
 
 describe('Settings-Panel Fokus-Loop (IMP-26)', () => {
