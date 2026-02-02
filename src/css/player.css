@@ -297,15 +297,15 @@
   gap: var(--space-sm);
 }
 
-/* Slider-Container: initial versteckt (wird per JS bei aria-expanded="true" eingeblendet) */
+/* Slider-Container: initial versteckt, sichtbar wenn [hidden] entfernt (IMP-12) */
 .player-volume__slider {
   display: none;
   width: var(--player-volume-slider-width);
   align-items: center;
 }
 
-.player-volume__slider[hidden] {
-  display: none !important;
+.player-volume__slider:not([hidden]) {
+  display: flex;
 }
 
 /* Lautstärke-Range: gleiche Basis wie Timeline, Thumb 44×44px (Touch) */

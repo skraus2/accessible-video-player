@@ -93,6 +93,53 @@ function initTimelineControls() {
   });
 }
 
+/**
+ * IMP-12: Lautstärke-Button öffnet/schließt Lautstärke-Slider
+ * - Click: Toggle Sichtbarkeit, aria-expanded
+ * - Optional: Klick außerhalb schließt Slider
+ */
+function initVolumeControls() {
+  const button = /** @type {HTMLButtonElement | null} */ (
+    document.querySelector('.player-btn--volume')
+  );
+  const slider = document.getElementById('volume-slider');
+
+  if (!button || !slider) return;
+
+  function isExpanded() {
+    return button.getAttribute('aria-expanded') === 'true';
+  }
+
+  function setExpanded(expanded) {
+    button.setAttribute('aria-expanded', String(expanded));
+    if (expanded) {
+      slider.removeAttribute('hidden');
+    } else {
+      slider.setAttribute('hidden', '');
+    }
+  }
+
+  function closeSlider() {
+    if (isExpanded()) {
+      setExpanded(false);
+    }
+  }
+
+  button.addEventListener('click', e => {
+    e.stopPropagation();
+    setExpanded(!isExpanded());
+  });
+
+  // Optional: Klick außerhalb schließt Slider
+  document.addEventListener('click', e => {
+    const volume = button.closest('.player-volume');
+    if (volume && !volume.contains(/** @type {Node} */ (e.target))) {
+      closeSlider();
+    }
+  });
+}
+
 // Init
 initPlayPauseControls();
 initTimelineControls();
+initVolumeControls();
