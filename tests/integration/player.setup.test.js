@@ -135,6 +135,70 @@ describe('Play/Pause Integration (IMP-20I-A)', () => {
   });
 });
 
+describe('Play/Pause via Tastatur (IMP-22)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupVideoMock();
+    await import('../../src/js/player.js');
+  });
+
+  test('Space-Taste startet Video wenn Play-Button fokussiert', async () => {
+    const user = userEvent.setup();
+    const button = screen.getByRole('button', { name: 'Abspielen' });
+    const video = document.getElementById('player-video');
+
+    button.focus();
+    await user.keyboard(' ');
+
+    expect(video.paused).toBe(false);
+    expect(button).toHaveAttribute('aria-label', 'Pause');
+  });
+
+  test('Enter-Taste startet Video wenn Play-Button fokussiert', async () => {
+    const user = userEvent.setup();
+    const button = screen.getByRole('button', { name: 'Abspielen' });
+    const video = document.getElementById('player-video');
+
+    button.focus();
+    await user.keyboard('{Enter}');
+
+    expect(video.paused).toBe(false);
+    expect(button).toHaveAttribute('aria-label', 'Pause');
+  });
+
+  test('Space-Taste pausiert Video wenn Pause-Button fokussiert', async () => {
+    const user = userEvent.setup();
+    const button = screen.getByRole('button', { name: 'Abspielen' });
+    const video = document.getElementById('player-video');
+
+    button.focus();
+    await user.keyboard(' ');
+    expect(video.paused).toBe(false);
+
+    await user.keyboard(' ');
+
+    expect(video.paused).toBe(true);
+    expect(button).toHaveAttribute('aria-label', 'Abspielen');
+  });
+
+  test('Enter-Taste pausiert Video wenn Pause-Button fokussiert', async () => {
+    const user = userEvent.setup();
+    const button = screen.getByRole('button', { name: 'Abspielen' });
+    const video = document.getElementById('player-video');
+
+    button.focus();
+    await user.keyboard('{Enter}');
+    expect(video.paused).toBe(false);
+
+    await user.keyboard('{Enter}');
+
+    expect(video.paused).toBe(true);
+    expect(button).toHaveAttribute('aria-label', 'Abspielen');
+  });
+});
+
 describe('Untertitel-Toggle Integration (IMP-20I-B)', () => {
   beforeEach(async () => {
     jest.resetModules();
