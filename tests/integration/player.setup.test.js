@@ -286,6 +286,73 @@ describe('Untertitel-Toggle Integration (IMP-20I-B)', () => {
   });
 });
 
+describe('Toggle-Buttons aria-pressed (IMP-33, WCAG 4.1.2)', () => {
+  test('CC: SR sagt „nicht gedrückt" / „gedrückt" – aria-pressed synchron', async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupCaptionsTrackMock();
+    await import('../../src/js/player.js');
+
+    const button = screen.getByRole('button', { name: 'Untertitel' });
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+
+    fireEvent.click(button);
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('AD: aria-pressed wechselt synchron mit Audiodeskription-Zustand', async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupTracksMock();
+    await import('../../src/js/player.js');
+
+    const button = screen.getByRole('button', { name: 'Audiodeskription' });
+    const video = document.getElementById('player-video');
+    const descriptionsTrack = video.textTracks.find(
+      t => t.kind === 'descriptions'
+    );
+
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+
+    fireEvent.click(button);
+    expect(descriptionsTrack.mode).toBe('showing');
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+
+    fireEvent.click(button);
+    expect(descriptionsTrack.mode).toBe('hidden');
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  test('Fullscreen: aria-pressed wechselt synchron mit Vollbild-Zustand', async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    setupFullscreenMock();
+    await import('../../src/js/player.js');
+
+    const button = screen.getByRole('button', { name: 'Vollbild aktivieren' });
+
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+
+    await userEvent.setup().click(button);
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+    expect(button).toHaveAttribute('aria-label', 'Vollbild beenden');
+
+    await userEvent.setup().click(button);
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(button).toHaveAttribute('aria-pressed', 'false');
+    expect(button).toHaveAttribute('aria-label', 'Vollbild aktivieren');
+  });
+});
+
 describe('Timeline-Slider Integration (IMP-20I-C)', () => {
   beforeEach(async () => {
     jest.resetModules();
@@ -1085,5 +1152,54 @@ function setupCaptionsTrackMock() {
     configurable: true,
     enumerable: true,
     get: () => mockTextTracks,
+  });
+}
+
+/** Mockt Captions + Descriptions für AD-Tests (IMP-33) */
+function setupTracksMock() {
+  const video = document.getElementById('player-video');
+  if (!video) return;
+
+  const captionsTrack = { mode: 'hidden', kind: 'captions' };
+  const descriptionsTrack = { mode: 'hidden', kind: 'descriptions' };
+  const mockTextTracks = [captionsTrack, descriptionsTrack];
+
+  Object.defineProperty(video, 'textTracks', {
+    configurable: true,
+    enumerable: true,
+    get: () => mockTextTracks,
+  });
+}
+
+/** Mockt Fullscreen-API für aria-pressed-Tests (JSDOM hat kein Fullscreen) */
+function setupFullscreenMock() {
+  let fullscreenElement = null;
+
+  const requestFullscreen = async function () {
+    fullscreenElement = this;
+    document.dispatchEvent(new Event('fullscreenchange'));
+  };
+
+  const exitFullscreen = async function () {
+    fullscreenElement = null;
+    document.dispatchEvent(new Event('fullscreenchange'));
+  };
+
+  const playerContainer = document.querySelector('.player-container');
+  if (playerContainer) {
+    playerContainer.requestFullscreen = requestFullscreen;
+    playerContainer.webkitRequestFullscreen = requestFullscreen;
+  }
+
+  document.exitFullscreen = exitFullscreen;
+  document.webkitExitFullscreen = exitFullscreen;
+
+  Object.defineProperty(document, 'fullscreenElement', {
+    configurable: true,
+    get: () => fullscreenElement,
+  });
+  Object.defineProperty(document, 'webkitFullscreenElement', {
+    configurable: true,
+    get: () => fullscreenElement,
   });
 }
