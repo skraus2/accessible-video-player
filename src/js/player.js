@@ -11,6 +11,7 @@ import {
   toggleDescriptions,
   syncDescriptionsButtonState,
 } from './utils/toggleDescriptions.js';
+import { toggleFullscreen, isFullscreen } from './utils/toggleFullscreen.js';
 
 if (typeof formatTime !== 'function') {
   throw new Error('formatTime sollte eine Funktion sein');
@@ -255,6 +256,57 @@ function initDescriptionsControls() {
 }
 
 /**
+ * IMP-20: Vollbild-Button Funktionalität
+ * - Click: Toggle Fullscreen (Player-Container)
+ * - aria-pressed, aria-label, Icon-Wechsel
+ * - fullscreenchange: Sync bei ESC
+ */
+function initFullscreenControls() {
+  const playerContainer = document.querySelector('.player-container');
+  const button = document.querySelector('.player-btn--fullscreen');
+  const fullscreenIcon = button?.querySelector('.player-btn__icon--fullscreen');
+  const exitIcon = button?.querySelector('.player-btn__icon--exit-fullscreen');
+
+  if (!playerContainer || !button) return;
+
+  function updateUI(fullscreen) {
+    button.setAttribute('aria-pressed', String(fullscreen));
+    button.setAttribute(
+      'aria-label',
+      fullscreen ? 'Vollbild beenden' : 'Vollbild aktivieren'
+    );
+    button.setAttribute(
+      'title',
+      fullscreen ? 'Vollbild beenden' : 'Vollbild aktivieren'
+    );
+
+    if (fullscreenIcon && exitIcon) {
+      if (fullscreen) {
+        fullscreenIcon.setAttribute('hidden', '');
+        exitIcon.removeAttribute('hidden');
+      } else {
+        fullscreenIcon.removeAttribute('hidden');
+        exitIcon.setAttribute('hidden', '');
+      }
+    }
+  }
+
+  function onFullscreenChange() {
+    updateUI(isFullscreen());
+  }
+
+  document.addEventListener('fullscreenchange', onFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+  document.addEventListener('mozfullscreenchange', onFullscreenChange);
+  document.addEventListener('MSFullscreenChange', onFullscreenChange);
+
+  button.addEventListener('click', async () => {
+    await toggleFullscreen(/** @type {HTMLElement} */ (playerContainer));
+    updateUI(isFullscreen());
+  });
+}
+
+/**
  * IMP-16 + IMP-17: Settings-Panel öffnen/schließen
  * - Click Settings: Panel anzeigen, aria-expanded
  * - Close-Button, Backdrop-Click, ESC: Panel schließen
@@ -374,4 +426,5 @@ initTimelineControls();
 initVolumeControls();
 initCaptionsControls();
 initDescriptionsControls();
+initFullscreenControls();
 initSettingsControls();

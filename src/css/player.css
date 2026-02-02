@@ -171,6 +171,12 @@
   background: var(--color-primary-hover);
 }
 
+/* IMP-20: Fullscreen-Icon Toggle */
+.player-btn__icon--fullscreen[hidden],
+.player-btn__icon--exit-fullscreen[hidden] {
+  display: none !important;
+}
+
 .player-btn__icon {
   display: inline-flex;
   align-items: center;
