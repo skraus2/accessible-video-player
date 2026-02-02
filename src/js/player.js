@@ -7,6 +7,10 @@ import {
   toggleCaptions,
   syncCaptionsButtonState,
 } from './utils/toggleCaptions.js';
+import {
+  toggleDescriptions,
+  syncDescriptionsButtonState,
+} from './utils/toggleDescriptions.js';
 
 if (typeof formatTime !== 'function') {
   throw new Error('formatTime sollte eine Funktion sein');
@@ -218,8 +222,41 @@ function initCaptionsControls() {
   });
 }
 
+/**
+ * IMP-15: Audiodeskription-Button Funktionalität
+ * - Click: Toggle textTracks (descriptions) showing/hidden
+ * - aria-pressed, visuell hervorgehoben (analog CC)
+ */
+function initDescriptionsControls() {
+  const video = /** @type {HTMLVideoElement | null} */ (
+    document.getElementById('player-video')
+  );
+  const button = document.querySelector('.player-btn--descriptions');
+
+  if (!video || !button) return;
+
+  video.addEventListener('loadedmetadata', () => {
+    syncDescriptionsButtonState(
+      video,
+      /** @type {HTMLButtonElement} */ (button)
+    );
+  });
+
+  if (video.readyState >= 1) {
+    syncDescriptionsButtonState(
+      video,
+      /** @type {HTMLButtonElement} */ (button)
+    );
+  }
+
+  button.addEventListener('click', () => {
+    toggleDescriptions(video, /** @type {HTMLButtonElement} */ (button));
+  });
+}
+
 // Init
 initPlayPauseControls();
 initTimelineControls();
 initVolumeControls();
 initCaptionsControls();
+initDescriptionsControls();

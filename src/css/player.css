@@ -159,13 +159,15 @@
   outline-offset: 2px;
 }
 
-/* IMP-14: CC-Button hervorgehoben wenn aktiv (aria-pressed="true") */
-.player-btn--captions[aria-pressed='true'] {
+/* IMP-14/IMP-15: CC- und AD-Button hervorgehoben wenn aktiv (aria-pressed="true") */
+.player-btn--captions[aria-pressed='true'],
+.player-btn--descriptions[aria-pressed='true'] {
   background: var(--color-primary);
   color: var(--color-text-on-primary);
 }
 
-.player-btn--captions[aria-pressed='true']:hover {
+.player-btn--captions[aria-pressed='true']:hover,
+.player-btn--descriptions[aria-pressed='true']:hover {
   background: var(--color-primary-hover);
 }
 
