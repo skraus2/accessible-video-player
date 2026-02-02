@@ -852,6 +852,42 @@ describe('aria-expanded für Settings und Lautstärke (IMP-34, WCAG 4.1.2)', () 
   });
 });
 
+describe('Settings-Panel als Dialog (IMP-35, WCAG 4.1.2, 1.3.1)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  test('Panel hat role="dialog", aria-labelledby, aria-modal', () => {
+    const panel = document.getElementById('player-settings-panel');
+    expect(panel).toHaveAttribute('role', 'dialog');
+    expect(panel).toHaveAttribute('aria-labelledby', 'settings-heading');
+    expect(panel).toHaveAttribute('aria-modal', 'true');
+  });
+
+  test('Dialog-Label „Einstellungen" von settings-heading', () => {
+    const heading = document.getElementById('settings-heading');
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent('Einstellungen');
+    expect(heading.tagName).toBe('H2');
+  });
+
+  test('SR findet Dialog mit Name „Einstellungen" wenn Panel geöffnet', async () => {
+    const user = userEvent.setup();
+    const settingsButton = screen.getByRole('button', {
+      name: 'Einstellungen',
+    });
+
+    await user.click(settingsButton);
+
+    const dialog = screen.getByRole('dialog', { name: 'Einstellungen' });
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toBe(document.getElementById('player-settings-panel'));
+  });
+});
+
 describe('Settings-Panel Fokus-Loop (IMP-26)', () => {
   beforeEach(async () => {
     jest.resetModules();
