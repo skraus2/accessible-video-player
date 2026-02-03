@@ -74,6 +74,53 @@ test.describe('IMP-43E-C: Axe-Scan Settings-Panel offen', () => {
   });
 });
 
+test.describe('IMP-43E-D: Kompletter Tastatur-Workflow', () => {
+  test('Video mit Untertiteln starten (nur Tastatur)', async ({ page }) => {
+    await page.goto('/');
+
+    // Tab zu Play-Button (Video ist vor Play im DOM, ggf. 2 Tabs)
+    for (let i = 0; i < 5; i++) {
+      await page.keyboard.press('Tab');
+      const focused = await page.locator(':focus').getAttribute('aria-label');
+      if (focused === 'Abspielen') break;
+    }
+    const playFocused = await page.locator(':focus').getAttribute('aria-label');
+    expect(playFocused).toBe('Abspielen');
+
+    // Video starten
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(500);
+
+    // Prüfe Video läuft
+    const isPlaying = await page
+      .locator('#player-video')
+      .evaluate(v => !v.paused);
+    expect(isPlaying).toBe(true);
+
+    // Tab zu CC-Button (Timeline → Volume → CC = 3 Tabs)
+    for (let i = 0; i < 3; i++) {
+      await page.keyboard.press('Tab');
+    }
+    await expect(page.locator('.player-btn--captions')).toBeFocused();
+
+    // Untertitel aktivieren
+    await page.keyboard.press('Enter');
+    const ccPressed = await page
+      .locator('.player-btn--captions')
+      .getAttribute('aria-pressed');
+    expect(ccPressed).toBe('true');
+
+    // Verifiziere Untertitel sichtbar (Text-Track mode)
+    const captionsShowing = await page.locator('#player-video').evaluate(v => {
+      const track = Array.from(v.textTracks || []).find(
+        t => t.kind === 'captions'
+      );
+      return track?.mode === 'showing';
+    });
+    expect(captionsShowing).toBe(true);
+  });
+});
+
 test.describe('IMP-43: Axe Accessibility (WCAG 2.2 AA)', () => {
   test('Player-Seite: 0 Axe Violations für WCAG 2.2 AA', async ({ page }) => {
     await page.goto('/');
