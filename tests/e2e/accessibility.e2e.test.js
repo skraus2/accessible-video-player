@@ -1,9 +1,48 @@
 /**
  * IMP-43: Automatisierte Accessibility-Tests mit Axe
+ * IMP-43E-A: Axe-Scan Initial-Zustand (Video nicht gestartet, Settings geschlossen)
  * WCAG 2.2 AA – Ziel: 0 Violations
  */
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { writeFileSync, mkdirSync } from 'fs';
+import { join } from 'path';
+
+const REPORT_DIR = join(process.cwd(), 'docs', 'test-reports');
+
+test.describe('IMP-43E-A: Axe-Scan Initial-Zustand', () => {
+  test('Player hat keine A11y-Violations (Initial-Zustand)', async ({
+    page,
+  }) => {
+    await page.goto('/');
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
+      .analyze();
+
+    mkdirSync(REPORT_DIR, { recursive: true });
+    const timestamp = new Date()
+      .toISOString()
+      .replace(/[:.]/g, '-')
+      .slice(0, 19);
+    const reportPath = join(REPORT_DIR, `axe-initial-${timestamp}.json`);
+    writeFileSync(reportPath, JSON.stringify(results, null, 2), 'utf8');
+
+    if (results.violations.length > 0) {
+      const report = results.violations
+        .map(
+          v =>
+            `[${v.id}] ${v.help}\n  Impact: ${v.impact}\n  ${v.nodes.length} node(s): ${v.nodes.map(n => n.html).join('; ')}`
+        )
+        .join('\n\n');
+      throw new Error(
+        `Axe found ${results.violations.length} violation(s). Report: ${reportPath}\n\n${report}`
+      );
+    }
+
+    expect(results.violations).toEqual([]);
+  });
+});
 
 test.describe('IMP-43: Axe Accessibility (WCAG 2.2 AA)', () => {
   test('Player-Seite: 0 Axe Violations für WCAG 2.2 AA', async ({ page }) => {
