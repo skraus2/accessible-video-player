@@ -121,6 +121,45 @@ test.describe('IMP-43E-D: Kompletter Tastatur-Workflow', () => {
   });
 });
 
+test.describe('IMP-43E-E: Settings-Panel Fokus-Management', () => {
+  test('Settings-Panel Fokus-Management (Tastatur)', async ({ page }) => {
+    await page.goto('/');
+
+    // Tab zu Settings-Button
+    for (let i = 0; i < 12; i++) {
+      await page.keyboard.press('Tab');
+      const focused = await page.locator(':focus').getAttribute('aria-label');
+      if (focused === 'Einstellungen') break;
+    }
+    await expect(page.locator('.player-btn--settings')).toBeFocused();
+
+    // Settings öffnen
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#player-settings-panel')).toBeVisible();
+
+    // Fokus auf erstem Panel-Element (Wiedergabegeschwindigkeit-Select)
+    let focusedId = await page.locator(':focus').getAttribute('id');
+    expect(focusedId).toBe('player-settings-speed');
+
+    // Tab zirkuliert im Panel (Speed → Quality → Close → Speed)
+    for (let i = 0; i < 3; i++) {
+      await page.keyboard.press('Tab');
+    }
+    focusedId = await page.locator(':focus').getAttribute('id');
+    expect(focusedId).toBe('player-settings-speed');
+
+    // ESC schließt Panel
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#player-settings-panel')).toBeHidden();
+
+    // Fokus zurück auf Settings-Button
+    const focusedLabel = await page
+      .locator(':focus')
+      .getAttribute('aria-label');
+    expect(focusedLabel).toBe('Einstellungen');
+  });
+});
+
 test.describe('IMP-43: Axe Accessibility (WCAG 2.2 AA)', () => {
   test('Player-Seite: 0 Axe Violations für WCAG 2.2 AA', async ({ page }) => {
     await page.goto('/');
