@@ -17,7 +17,9 @@
     "lint": "eslint --no-error-on-unmatched-pattern src/**/*.js",
     "lint:fix": "eslint --no-error-on-unmatched-pattern src/**/*.js --fix",
     "format": "prettier --write \"src/**/*.{js,css,html}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "axe:report": "node scripts/axe-report.js",
+    "lighthouse:report": "npx @lhci/cli autorun --collect.url=http://localhost:3000 --collect.numberOfRuns=1"
   },
   "keywords": [
     "accessibility",

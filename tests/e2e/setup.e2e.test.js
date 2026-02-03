@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('Dev-Server ist erreichbar', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Barrierefreier Video-Player/);
-  await expect(page.locator('h1')).toHaveText('Setup erfolgreich!');
+  await expect(page.locator('h1')).toHaveText('Barrierefreier Video-Player');
 });
 
 test('Seite hat korrekte HTML-Struktur', async ({ page }) => {

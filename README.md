@@ -59,12 +59,12 @@ Frameworks wie React/Vue können Fokus-Management und ARIA-Handling erschweren. 
 
 ### Testing-Strategie (Triple-Layer Approach)
 
-| Ebene              | Tools                    | Coverage | WCAG-Prüfung                    |
-| ------------------ | ------------------------ | -------- | ------------------------------- |
-| **Unit Tests**     | Jest + JSDOM             | ~90%     | Helper-Funktionen, State-Management |
-| **Integration Tests** | Testing Library + jest-axe | ~80%  | Controls, ARIA-Interaktionen, automatisierte Axe-Scans |
-| **E2E Tests**      | Playwright + @axe-core/playwright | ~70% | User-Workflows, Cross-Browser, automatisierte WCAG-Prüfung |
-| **Manuelle Tests** | NVDA, JAWS, Axe DevTools, Lighthouse | 100% | Screenreader-UX, Subjektive Kriterien |
+| Ebene                 | Tools                                | Coverage | WCAG-Prüfung                                               |
+| --------------------- | ------------------------------------ | -------- | ---------------------------------------------------------- |
+| **Unit Tests**        | Jest + JSDOM                         | ~90%     | Helper-Funktionen, State-Management                        |
+| **Integration Tests** | Testing Library + jest-axe           | ~80%     | Controls, ARIA-Interaktionen, automatisierte Axe-Scans     |
+| **E2E Tests**         | Playwright + @axe-core/playwright    | ~70%     | User-Workflows, Cross-Browser, automatisierte WCAG-Prüfung |
+| **Manuelle Tests**    | NVDA, JAWS, Axe DevTools, Lighthouse | 100%     | Screenreader-UX, Subjektive Kriterien                      |
 
 **Gesamte Code-Coverage:** ≥75% (exzellent für akademischen Prototyp)
 
@@ -133,6 +133,21 @@ npm run dev
 # 5. NVDA starten (Ctrl+Alt+N) → Player mit Tastatur bedienen
 ```
 
+### Automatisierte Accessibility-Reports (IMP-43)
+
+```bash
+# Axe-Report als JSON speichern (Dev-Server muss laufen)
+npm run axe:report
+# → docs/test-reports/axe-report-*.json
+
+# Lighthouse-Report (Dev-Server muss laufen)
+npm run dev &
+sleep 5
+npm run lighthouse:report
+```
+
+→ Vollständige Anleitung: `docs/accessibility-testing.md`
+
 ## 📁 Projektstruktur
 
 ```
@@ -198,13 +213,13 @@ accessible-video-player/
 
 ### Erfüllte Erfolgskriterien (geplant)
 
-| Prinzip   | Level A | Level AA | Gesamt  |
-| --------- | ------- | -------- | ------- |
-| 1. Wahrnehmbar | 9/9 ✅  | 5/5 ✅   | 14/14   |
-| 2. Bedienbar   | 7/7 ✅  | 7/7 ✅   | 14/14   |
-| 3. Verständlich| 4/4 ✅  | 3/3 ✅   | 7/7     |
-| 4. Robust      | 2/2 ✅  | 1/1 ✅   | 3/3     |
-| **GESAMT**     | 22/22   | 16/16    | 38/38   |
+| Prinzip         | Level A | Level AA | Gesamt |
+| --------------- | ------- | -------- | ------ |
+| 1. Wahrnehmbar  | 9/9 ✅  | 5/5 ✅   | 14/14  |
+| 2. Bedienbar    | 7/7 ✅  | 7/7 ✅   | 14/14  |
+| 3. Verständlich | 4/4 ✅  | 3/3 ✅   | 7/7    |
+| 4. Robust       | 2/2 ✅  | 1/1 ✅   | 3/3    |
+| **GESAMT**      | 22/22   | 16/16    | 38/38  |
 
 → Detaillierte Evaluations-Matrix in `docs/evaluation/wcag-compliance.md`
 
@@ -243,12 +258,12 @@ accessible-video-player/
 
 ### Evaluations-Framework
 
-| Kriterium        | Testmethode           | Tool                    | Beleg                |
-| ---------------- | --------------------- | ----------------------- | -------------------- |
-| 1.1.1 (Nicht-Text-Inhalte) | Automatisiert + Manuell | Axe + NVDA           | Screenshot + SR-Transkript |
-| 2.1.1 (Tastatur) | E2E-Test              | Playwright              | Test-Code + Video     |
-| 4.1.2 (Name, Rolle, Wert) | Integration-Test | jest-axe + Testing Library | Test-Coverage-Report |
-| …                | …                     | …                       | …                    |
+| Kriterium                  | Testmethode             | Tool                       | Beleg                      |
+| -------------------------- | ----------------------- | -------------------------- | -------------------------- |
+| 1.1.1 (Nicht-Text-Inhalte) | Automatisiert + Manuell | Axe + NVDA                 | Screenshot + SR-Transkript |
+| 2.1.1 (Tastatur)           | E2E-Test                | Playwright                 | Test-Code + Video          |
+| 4.1.2 (Name, Rolle, Wert)  | Integration-Test        | jest-axe + Testing Library | Test-Coverage-Report       |
+| …                          | …                       | …                          | …                          |
 
 → Vollständige Evaluations-Tabelle in `docs/evaluation/wcag-compliance.md`
 
