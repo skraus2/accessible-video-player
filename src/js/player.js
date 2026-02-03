@@ -480,8 +480,12 @@ function initSettingsControls() {
   }
 
   function closePanel() {
-    // IMP-25 + IMP-27: Fokus zuerst zurück auf Settings-Button (WCAG 2.4.3, 3.2.1)
-    // Vor dem Verstecken, damit Browser-Fokus-Logik bei hidden nicht überschreibt
+    // Blur fokussiertes Element im Panel (z.B. Speed-Select), damit Fokus zuverlässig wechselt
+    const active = document.activeElement;
+    if (active && panel.contains(active)) {
+      /** @type {HTMLElement} */ (active).blur();
+    }
+    // IMP-25 + IMP-27: Fokus zurück auf Settings-Button (WCAG 2.4.3, 3.2.1)
     settingsButton.focus();
     panel.setAttribute('hidden', '');
     settingsButton.setAttribute('aria-expanded', 'false');
