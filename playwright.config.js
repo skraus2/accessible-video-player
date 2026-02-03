@@ -1,3 +1,6 @@
+/**
+ * IMP-43E-G: Multi-Browser-Tests (chromium, firefox, webkit)
+ */
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
