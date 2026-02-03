@@ -1102,6 +1102,7 @@ describe('Tab-Reihenfolge (IMP-21)', () => {
     'Audiodeskription', // AD
     'Einstellungen', // Settings
     'Vollbild aktivieren', // Fullscreen
+    'Transkript', // IMP-40
   ];
 
   test('Tab-Reihenfolge folgt visueller Anordnung (links→rechts)', () => {
@@ -1188,6 +1189,7 @@ describe('Kompletter Tastatur-Workflow (IMP-29I-A)', () => {
     'Audiodeskription',
     'Einstellungen',
     'Vollbild aktivieren',
+    'Transkript',
   ];
 
   test('Tab-Sequenz durch alle Controls (vorwärts)', async () => {
@@ -1202,11 +1204,9 @@ describe('Kompletter Tastatur-Workflow (IMP-29I-A)', () => {
 
   test('Shift+Tab rückwärts-Navigation', async () => {
     const user = userEvent.setup();
-    const fullscreenButton = screen.getByRole('button', {
-      name: 'Vollbild aktivieren',
-    });
+    const lastButton = screen.getByRole('button', { name: 'Transkript' });
 
-    fullscreenButton.focus();
+    lastButton.focus();
 
     const reverseOrder = [...TAB_ORDER].reverse();
     for (let i = 1; i < reverseOrder.length; i++) {
@@ -1215,6 +1215,25 @@ describe('Kompletter Tastatur-Workflow (IMP-29I-A)', () => {
         reverseOrder[i]
       );
     }
+  });
+
+  test('Transkript ein-/ausklappen (IMP-40)', async () => {
+    const user = userEvent.setup();
+    const toggle = screen.getByRole('button', { name: 'Transkript' });
+    const content = document.getElementById('player-transcript-content');
+
+    expect(content).toHaveAttribute('hidden');
+
+    await user.click(toggle);
+
+    expect(content).not.toHaveAttribute('hidden');
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(toggle).toHaveTextContent('Transkript ausblenden');
+
+    await user.click(toggle);
+
+    expect(content).toHaveAttribute('hidden');
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
   });
 
   test('Versteckte Elemente werden übersprungen (Lautstärke-Slider geschlossen)', async () => {

@@ -619,6 +619,40 @@ function initKeyboardShortcuts() {
   });
 }
 
+/**
+ * IMP-40: Texttranskript ein-/ausklappen + Zeitstempel-Links (WCAG 1.2.3, 1.2.8)
+ */
+function initTranscriptControls() {
+  const toggle = document.getElementById('player-transcript-toggle');
+  const content = document.getElementById('player-transcript-content');
+  const video = document.getElementById('player-video');
+
+  if (!toggle || !content) return;
+
+  toggle.addEventListener('click', () => {
+    const wasHidden = content.hidden;
+    content.hidden = !wasHidden;
+    toggle.setAttribute('aria-expanded', String(!content.hidden));
+    toggle.textContent = content.hidden
+      ? 'Vollständiges Transkript anzeigen'
+      : 'Transkript ausblenden';
+  });
+
+  content.addEventListener('click', e => {
+    const link = /** @type {HTMLElement} */ (e.target).closest(
+      '.player-transcript__timestamp'
+    );
+    if (link && video && link instanceof HTMLAnchorElement) {
+      const time = parseFloat(link.getAttribute('data-time') ?? '0');
+      if (Number.isFinite(time)) {
+        e.preventDefault();
+        video.currentTime = time;
+        video.focus();
+      }
+    }
+  });
+}
+
 // Init
 initPlayPauseControls();
 initTimelineControls();
@@ -627,4 +661,5 @@ initCaptionsControls();
 initDescriptionsControls();
 initFullscreenControls();
 initSettingsControls();
+initTranscriptControls();
 initKeyboardShortcuts();

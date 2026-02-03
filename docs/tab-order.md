@@ -19,6 +19,7 @@ Die Tab-Reihenfolge folgt der visuellen Anordnung (links→rechts):
 6. **Audiodeskription** (AD-Button)
 7. **Einstellungen** (Settings-Button)
 8. **Vollbild aktivieren** (Fullscreen-Button)
+9. **Transkript** (IMP-40: Vollständiges Transkript anzeigen)
 
 ## Versteckte Elemente (nicht in Tab-Sequenz)
 
