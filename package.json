@@ -13,7 +13,7 @@
     "test:e2e:headed": "playwright test --headed",
     "test:unit": "node --experimental-vm-modules node_modules/.bin/jest --testPathPatterns=unit",
     "test:integration": "node --experimental-vm-modules node_modules/.bin/jest --testPathPatterns=integration",
-    "test:coverage": "jest --coverage tests/unit tests/integration",
+    "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage tests/unit tests/integration",
     "test:watch": "jest --watch",
     "lint": "eslint --no-error-on-unmatched-pattern src/**/*.js",
     "lint:fix": "eslint --no-error-on-unmatched-pattern src/**/*.js --fix",
