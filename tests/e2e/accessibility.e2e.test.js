@@ -9,6 +9,7 @@ import { writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 const REPORT_DIR = join(process.cwd(), 'docs', 'test-reports');
+const SCREENSHOT_DIR = join(process.cwd(), 'docs', 'screenshots');
 
 test.describe('IMP-43E-A: Axe-Scan Initial-Zustand', () => {
   test('Player hat keine A11y-Violations (Initial-Zustand)', async ({
@@ -157,6 +158,24 @@ test.describe('IMP-43E-E: Settings-Panel Fokus-Management', () => {
       .locator(':focus')
       .getAttribute('aria-label');
     expect(focusedLabel).toBe('Einstellungen');
+  });
+});
+
+test.describe('IMP-43E-F: Responsive (320px)', () => {
+  test('Player ist responsive bei 320px', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.goto('/');
+
+    await expect(page.locator('#player-video')).toBeVisible();
+
+    const scrollWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth
+    );
+    expect(scrollWidth).toBeLessThanOrEqual(320);
+
+    mkdirSync(SCREENSHOT_DIR, { recursive: true });
+    const screenshotPath = join(SCREENSHOT_DIR, 'player-320px.png');
+    await page.screenshot({ path: screenshotPath });
   });
 });
 
