@@ -59,6 +59,21 @@ test.describe('IMP-43E-B: Axe-Scan während Wiedergabe', () => {
   });
 });
 
+test.describe('IMP-43E-C: Axe-Scan Settings-Panel offen', () => {
+  test('Settings-Panel hat keine Violations', async ({ page }) => {
+    await page.goto('/');
+
+    await page.click('.player-btn--settings');
+    await expect(page.locator('#player-settings-panel')).toBeVisible();
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
+      .analyze();
+
+    expect(results.violations).toEqual([]);
+  });
+});
+
 test.describe('IMP-43: Axe Accessibility (WCAG 2.2 AA)', () => {
   test('Player-Seite: 0 Axe Violations für WCAG 2.2 AA', async ({ page }) => {
     await page.goto('/');
