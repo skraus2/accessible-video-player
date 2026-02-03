@@ -61,7 +61,13 @@ test.describe('IMP-44: Cross-Browser Kompatibilität', () => {
     expect(captionsShowing).toBe(true);
   });
 
-  test('Fullscreen-Toggle funktioniert', async ({ page }) => {
+  test('Fullscreen-Toggle funktioniert', async ({ page }, testInfo) => {
+    // Fullscreen-API funktioniert in Chromium-Headless nicht
+    test.skip(
+      testInfo.project.name === 'chromium',
+      'Fullscreen API does not work in Chromium headless'
+    );
+
     await page.goto('/');
     await page.click('.player-btn--fullscreen');
 

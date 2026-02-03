@@ -29,7 +29,7 @@ test.describe('IMP-45: Textabstände (WCAG 1.4.12)', () => {
 
     await page.click('.player-btn--settings');
     await expect(page.locator('#player-settings-panel')).toBeVisible();
-    await expect(page.locator('.player-settings__label')).toBeVisible();
+    await expect(page.locator('.player-settings__label').first()).toBeVisible();
 
     const labels = page.locator('.player-settings__label');
     const count = await labels.count();

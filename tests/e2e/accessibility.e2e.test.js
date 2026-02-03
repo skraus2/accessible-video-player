@@ -139,6 +139,9 @@ test.describe('IMP-43E-E: Settings-Panel Fokus-Management', () => {
     await expect(page.locator('#player-settings-panel')).toBeVisible();
 
     // Fokus auf erstem Panel-Element (Wiedergabegeschwindigkeit-Select)
+    await expect(page.locator('#player-settings-speed')).toBeFocused({
+      timeout: 5000,
+    });
     let focusedId = await page.locator(':focus').getAttribute('id');
     expect(focusedId).toBe('player-settings-speed');
 

@@ -27,11 +27,7 @@ test.describe('IMP-47: Regression Smoke Tests', () => {
   });
 
   test('Video startet/pausiert (Tastatur)', async ({ page }) => {
-    for (let i = 0; i < 5; i++) {
-      await page.keyboard.press('Tab');
-      const focused = await page.locator(':focus').getAttribute('aria-label');
-      if (focused === 'Abspielen') break;
-    }
+    await page.getByRole('button', { name: 'Abspielen' }).focus();
     await page.keyboard.press('Enter');
     await page.waitForTimeout(300);
     const isPlaying = await page
@@ -114,28 +110,29 @@ test.describe('IMP-47: Regression Smoke Tests', () => {
     await expect(page.locator('.player-btn--settings')).toBeFocused();
   });
 
-  test('Fullscreen aktivieren/deaktivieren', async ({ page }) => {
-    await page.click('.player-btn--fullscreen');
-    const pressed = await page
-      .locator('.player-btn--fullscreen')
-      .getAttribute('aria-pressed');
-    expect(pressed).toBe('true');
+  test('Fullscreen aktivieren/deaktivieren', async ({ page }, testInfo) => {
+    // Fullscreen-API funktioniert in Chromium-Headless nicht – mit --headed oder Firefox/WebKit testen
+    test.skip(
+      testInfo.project.name === 'chromium',
+      'Fullscreen API does not work in Chromium headless'
+    );
 
     await page.click('.player-btn--fullscreen');
-    const pressedAfter = await page
-      .locator('.player-btn--fullscreen')
-      .getAttribute('aria-pressed');
-    expect(pressedAfter).toBe('false');
+    await expect(page.locator('.player-btn--fullscreen')).toHaveAttribute(
+      'aria-pressed',
+      'true',
+      { timeout: 5000 }
+    );
+
+    await page.click('.player-btn--fullscreen');
+    await expect(page.locator('.player-btn--fullscreen')).toHaveAttribute(
+      'aria-pressed',
+      'false',
+      { timeout: 5000 }
+    );
   });
 
   test('Tab-Reihenfolge korrekt', async ({ page }) => {
-    const expectedOrder = [
-      'Abspielen',
-      'Videoposition',
-      'Lautstärke',
-      'Untertitel',
-      'Einstellungen',
-    ];
     const found = [];
     for (let i = 0; i < 15; i++) {
       await page.keyboard.press('Tab');
@@ -143,7 +140,7 @@ test.describe('IMP-47: Regression Smoke Tests', () => {
       const id = await page.locator(':focus').getAttribute('id');
       if (label) found.push(label);
       else if (id === 'player-timeline-input') found.push('Videoposition');
-      if (found.length >= 5) break;
+      if (found.length >= 7) break;
     }
     expect(found).toContain('Abspielen');
     expect(found).toContain('Untertitel');
