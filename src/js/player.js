@@ -20,6 +20,41 @@ if (typeof formatTime !== 'function') {
 }
 
 /**
+ * IMP-41: Fehlerbehandlung bei Video-Ladefehlern (WCAG 3.3.1, 4.1.3)
+ */
+function initVideoErrorHandling() {
+  const video = document.getElementById('player-video');
+  const errorEl = document.getElementById('player-error');
+  const container = document.querySelector('.player-container');
+
+  if (!video || !errorEl || !container) return;
+
+  video.addEventListener('error', () => {
+    const mediaError = video.error;
+    let message =
+      'Fehler beim Laden des Videos. Bitte versuchen Sie es später erneut.';
+
+    if (mediaError) {
+      if (mediaError.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
+        message =
+          'Videoformat wird nicht unterstützt. Bitte verwenden Sie einen anderen Browser.';
+      } else if (mediaError.code === MediaError.MEDIA_ERR_NETWORK) {
+        message =
+          'Netzwerkfehler. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.';
+      } else if (mediaError.code === MediaError.MEDIA_ERR_DECODE) {
+        message =
+          'Fehler beim Dekodieren des Videos. Das Dateiformat könnte beschädigt sein.';
+      }
+    }
+
+    errorEl.textContent = message;
+    errorEl.hidden = false;
+    container.classList.add('player--error');
+    announceStatus('Fehler beim Laden des Videos', { clearAfterMs: 3000 });
+  });
+}
+
+/**
  * IMP-10: Play/Pause-Button Funktionalität (Maus/Touch)
  * - Click auf Button toggelt video.play()/video.pause()
  * - Icon + aria-label werden aktualisiert
@@ -654,6 +689,7 @@ function initTranscriptControls() {
 }
 
 // Init
+initVideoErrorHandling();
 initPlayPauseControls();
 initTimelineControls();
 initVolumeControls();

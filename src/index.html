@@ -44,6 +44,15 @@
       aria-label="Video-Player: Barrierefreier Video-Player mit Untertiteln und Audiodeskription"
     >
       <div class="player-video-area">
+        <div
+          id="player-error"
+          class="player-error"
+          role="alert"
+          aria-live="assertive"
+          hidden
+        >
+          Fehler beim Laden des Videos. Bitte versuchen Sie es später erneut.
+        </div>
         <video
           id="player-video"
           preload="metadata"

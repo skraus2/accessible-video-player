@@ -81,6 +81,38 @@ describe('Player Integration (IMP-20I)', () => {
   });
 });
 
+describe('Video-Fehlerbehandlung (IMP-41)', () => {
+  beforeEach(async () => {
+    jest.resetModules();
+    document.body.innerHTML = '';
+    loadPlayerHTML();
+    await import('../../src/js/player.js');
+  });
+
+  test('Fehlermeldung erscheint visuell bei Video-Error', () => {
+    const video = document.getElementById('player-video');
+    const errorEl = document.getElementById('player-error');
+    const container = document.querySelector('.player-container');
+
+    expect(errorEl).toHaveAttribute('hidden');
+
+    fireEvent(video, new Event('error'));
+
+    expect(errorEl).not.toHaveAttribute('hidden');
+    expect(errorEl).toHaveTextContent(/Fehler beim Laden des Videos/);
+    expect(container).toHaveClass('player--error');
+  });
+
+  test('Live-Region kündigt Fehler an', () => {
+    const video = document.getElementById('player-video');
+    const liveRegion = document.getElementById('player-status');
+
+    fireEvent(video, new Event('error'));
+
+    expect(liveRegion).toHaveTextContent('Fehler beim Laden des Videos');
+  });
+});
+
 describe('Play/Pause Integration (IMP-20I-A)', () => {
   beforeEach(async () => {
     jest.resetModules();

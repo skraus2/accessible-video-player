@@ -23,6 +23,32 @@
   background: var(--color-text);
 }
 
+/* IMP-41: Fehlermeldung bei Video-Ladefehler (WCAG 3.3.1, 4.1.3) */
+.player-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffffff;
+  font-size: var(--font-size-base);
+  text-align: center;
+  z-index: 10;
+}
+
+.player-error[hidden] {
+  display: none !important;
+}
+
+/* IMP-41: Controls deaktiviert bei Fehler */
+.player-container.player--error .player-controls,
+.player-container.player--error .player-transcript {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .player-video-area video {
   display: block;
   width: 100%;
