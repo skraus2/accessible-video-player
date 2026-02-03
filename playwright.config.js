@@ -1,5 +1,5 @@
 /**
- * IMP-43E-G: Multi-Browser-Tests (chromium, firefox, webkit)
+ * IMP-43E-G, IMP-44: Multi-Browser-Tests (Chrome, Firefox, Safari, Edge)
  */
 import { defineConfig, devices } from '@playwright/test';
 
@@ -20,18 +20,10 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
   projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    { name: 'edge', use: { ...devices['Desktop Edge'], channel: 'msedge' } },
   ],
   webServer: {
     command: 'npm run dev',

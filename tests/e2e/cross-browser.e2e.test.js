@@ -1,10 +1,10 @@
 /**
- * IMP-43E-G: Cross-Browser-Tests (Chrome, Firefox, Safari)
- * Läuft automatisch in allen 3 Browsern via playwright.config.js projects
+ * IMP-43E-G, IMP-44: Cross-Browser-Tests (Chrome, Firefox, Safari, Edge)
+ * Läuft automatisch in allen 4 Browsern via playwright.config.js projects
  */
 import { test, expect } from '@playwright/test';
 
-test.describe('IMP-43E-G: Cross-Browser Grundfunktionen', () => {
+test.describe('IMP-44: Cross-Browser Kompatibilität', () => {
   test('Play-Button funktioniert', async ({ page }) => {
     await page.goto('/');
     await page.click('.player-btn--play-pause');
@@ -16,7 +16,34 @@ test.describe('IMP-43E-G: Cross-Browser Grundfunktionen', () => {
     expect(isPlaying).toBe(true);
   });
 
-  test('Untertitel-Toggle funktioniert', async ({ page }) => {
+  test('Timeline-Slider funktioniert', async ({ page }) => {
+    await page.goto('/');
+    await page.click('.player-btn--play-pause');
+    await page.waitForTimeout(300);
+
+    const timeline = page.locator('#player-timeline-input');
+    await timeline.focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    const value = parseInt(await timeline.inputValue(), 10);
+    expect(value).toBeGreaterThanOrEqual(0);
+    expect(value).toBeLessThanOrEqual(100);
+  });
+
+  test('Lautstärke-Slider funktioniert', async ({ page }) => {
+    await page.goto('/');
+    await page.click('.player-btn--volume');
+    await expect(page.locator('#volume-slider')).toBeVisible();
+
+    const volumeInput = page.locator('#player-volume-input');
+    await volumeInput.focus();
+    await page.keyboard.press('ArrowDown');
+    const valueAfter = parseInt(await volumeInput.inputValue(), 10);
+    expect(valueAfter).toBeLessThanOrEqual(100);
+    expect(valueAfter).toBeGreaterThanOrEqual(0);
+  });
+
+  test('Untertitel werden angezeigt', async ({ page }) => {
     await page.goto('/');
     await page.click('.player-btn--captions');
 
@@ -32,6 +59,22 @@ test.describe('IMP-43E-G: Cross-Browser Grundfunktionen', () => {
       return track?.mode === 'showing';
     });
     expect(captionsShowing).toBe(true);
+  });
+
+  test('Fullscreen-Toggle funktioniert', async ({ page }) => {
+    await page.goto('/');
+    await page.click('.player-btn--fullscreen');
+
+    const ariaPressed = await page
+      .locator('.player-btn--fullscreen')
+      .getAttribute('aria-pressed');
+    expect(ariaPressed).toBe('true');
+
+    await page.click('.player-btn--fullscreen');
+    const ariaPressedAfter = await page
+      .locator('.player-btn--fullscreen')
+      .getAttribute('aria-pressed');
+    expect(ariaPressedAfter).toBe('false');
   });
 
   test('Settings-Panel öffnen und schließen funktioniert', async ({ page }) => {

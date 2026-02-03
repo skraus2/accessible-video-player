@@ -39,7 +39,9 @@ jobs:
         run: npm run test:integration
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: |
+          npx playwright install --with-deps
+          npx playwright install msedge
 
       - name: Run E2E Tests
         run: npm run test:e2e
