@@ -616,6 +616,26 @@
   color: var(--color-text-muted);
 }
 
+/* IMP-45: Textabstände (WCAG 1.4.12) – kein Clipping bei erhöhten Abständen */
+.player-controls,
+.player-settings__content,
+.player-transcript {
+  overflow: visible;
+}
+
+.player-settings__label,
+.player-transcript__toggle,
+.player-transcript__intro,
+.player-transcript__list li {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.player-bar--main,
+.player-bar--secondary {
+  overflow: visible;
+}
+
 /* IMP-42: Responsive Breakpoints (WCAG 1.4.10 Reflow, 1.4.4 Textgröße) */
 @media (max-width: 480px) {
   .player-bar--main,
