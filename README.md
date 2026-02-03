@@ -217,7 +217,7 @@ accessible-video-player/
 | 4. Robust       | 2/2 ✅  | 1/1 ✅   | 3/3    |
 | **GESAMT**      | 22/22   | 16/16    | 38/38  |
 
-→ Detaillierte Evaluations-Matrix in `docs/evaluation/wcag-compliance.md`
+→ Detaillierte Evaluations-Matrix in `docs/evaluation/wcag-compliance.md` (IMP-49)
 
 ### Testing-Methodik pro Kriterium
 
