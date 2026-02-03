@@ -480,16 +480,12 @@ function initSettingsControls() {
   }
 
   function closePanel() {
-    // Blur fokussiertes Element im Panel (z.B. Speed-Select), damit Fokus zuverlässig wechselt
-    const active = document.activeElement;
-    if (active && panel.contains(active)) {
-      /** @type {HTMLElement} */ (active).blur();
-    }
-    // IMP-25 + IMP-27: Fokus zurück auf Settings-Button (WCAG 2.4.3, 3.2.1)
-    settingsButton.focus();
     panel.setAttribute('hidden', '');
     settingsButton.setAttribute('aria-expanded', 'false');
     setPanelInTabOrder(false); // IMP-21: Panel-Elemente nicht in Tab-Sequenz
+    // IMP-25 + IMP-27: Fokus zurück auf Settings-Button (WCAG 2.4.3, 3.2.1)
+    // setTimeout(0): Nach Click-Event, zuverlässig in jsdom/CI (verhindert Fokus-Restoration durch Select)
+    setTimeout(() => settingsButton.focus(), 0);
   }
 
   // IMP-21: Initial: Settings-Panel versteckt → tabindex="-1" auf allen Fokussierbaren
