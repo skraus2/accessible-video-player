@@ -1,6 +1,7 @@
 /**
  * IMP-36: Live-Region Status-Ankündigungen (WCAG 4.1.3)
- * Schreibt Nachricht in #player-status, leert nach 1 Sekunde.
+ * Schreibt Nachricht in #player-status (role="status", aria-live="polite").
+ * Screenreader lesen die Meldung vor, ohne Fokus zu wechseln.
  *
  * @param {string} message - Anzuzeigende Statusmeldung
  * @param {Object} [options]

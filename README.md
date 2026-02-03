@@ -46,16 +46,18 @@ Diese Bachelorarbeit konzipiert und implementiert einen prototypischen HTML5-Vid
 - Einstellungen (Wiedergabegeschwindigkeit, Qualität)
 - Vollbild-Modus
 
-## 🛠️ Tech Stack
+## 🛠️ Technologien
 
-### Implementierung
+| Bereich              | Technologie                                   |
+| -------------------- | --------------------------------------------- |
+| **Markup**           | HTML5 (semantisch, natives `<video>`)         |
+| **Styling**          | CSS3 (Custom Properties, Flexbox, Responsive) |
+| **Logik**            | Vanilla JavaScript (ES6+ Module)              |
+| **Unit/Integration** | Jest, Testing Library, JSDOM                  |
+| **E2E**              | Playwright, @axe-core/playwright              |
 
-- **HTML5:** Semantisches Markup, natives `<video>`-Element
-- **CSS3:** Custom Properties, Flexbox/Grid, Responsive Design
-- **Vanilla JavaScript (ES6+):** Keine Framework-Abhängigkeiten für volle A11y-Kontrolle
-
-**Warum kein Framework?**  
-Frameworks wie React/Vue können Fokus-Management und ARIA-Handling erschweren. Vanilla JS ermöglicht präzise Kontrolle über alle Accessibility-Aspekte und zeigt fundamentales Verständnis von Web-Standards.
+**Warum Vanilla JS?**  
+Frameworks können Fokus-Management und ARIA-Handling erschweren. Vanilla JS ermöglicht präzise Kontrolle über alle Accessibility-Aspekte.
 
 ### Testing-Strategie (Triple-Layer Approach)
 
@@ -97,28 +99,46 @@ npm run dev
 
 ## 🧪 Testing
 
+### Unit Tests (Jest + JSDOM)
+
+Helper-Funktionen, Formatierung, State-Management.
+
 ```bash
-# Alle Tests ausführen (Unit + Integration + E2E)
-npm test
-
-# Nur Unit Tests
 npm run test:unit
+```
 
-# Nur Integration Tests
+### Integration Tests (Testing Library + JSDOM)
+
+Controls, ARIA-Interaktionen, Fokus-Management, Live-Region.
+
+```bash
 npm run test:integration
+```
 
-# Nur E2E Tests (startet automatisch Dev-Server)
+### E2E Tests (Playwright)
+
+User-Workflows, Cross-Browser, Axe-Scans, Tastatur-Navigation.
+
+```bash
+# Playwright-Browser einmalig installieren
+npx playwright install
+
+# Alle E2E-Tests (startet Dev-Server automatisch)
 npm run test:e2e
 
-# E2E Tests mit UI (interaktiv, empfohlen während Entwicklung)
+# Regression-Smoke-Tests (nur Chromium, ~5 Min.)
+npm run test:regression
+
+# E2E mit UI (interaktiv)
 npm run test:e2e:ui
+```
 
-# Coverage-Report generieren
-npm run test:coverage
-# → Report in coverage/lcov-report/index.html
+### Alle Tests
 
-# Tests im Watch-Mode (Auto-Rerun bei Code-Änderungen)
-npm run test:watch
+```bash
+npm test          # Unit + Integration
+npm run test:e2e  # E2E separat (benötigt Playwright)
+npm run test:coverage  # Coverage-Report
 ```
 
 ### Manuelle Accessibility-Tests
@@ -152,61 +172,37 @@ npm run lighthouse:report
 
 ```
 accessible-video-player/
-├── src/                          # Source Code
+├── src/
 │   ├── index.html                # Haupt-HTML mit Player-Markup
 │   ├── css/
 │   │   ├── variables.css         # Design System (CSS Custom Properties)
 │   │   ├── player.css            # Player-Styling
-│   │   └── utilities.css         # Helper-Klassen (.sr-only, etc.)
+│   │   └── utilities.css         # .sr-only, etc.
 │   ├── js/
-│   │   ├── player.js             # Main Entry Point
-│   │   ├── utils/                # Helper-Funktionen
-│   │   │   ├── formatTime.js     # Zeitformatierung (MM:SS, H:MM:SS)
-│   │   │   ├── aria.js           # ARIA-Update-Funktionen
-│   │   │   └── liveRegion.js     # announceStatus() für Live-Regions
-│   │   └── components/           # Player-Komponenten
-│   │       ├── playPause.js      # Play/Pause-Logik
-│   │       ├── timeline.js       # Timeline-Slider
-│   │       ├── volume.js         # Lautstärke-Control
-│   │       ├── captions.js       # Untertitel-Toggle
-│   │       ├── settings.js       # Settings-Panel
-│   │       └── focusManagement.js # Fokus-Loop & -Return
-│   └── assets/
-│       ├── videos/
-│       │   ├── sample.mp4        # Test-Video
-│       │   ├── captions-de.vtt   # Deutsche Untertitel
-│       │   └── descriptions-de.vtt # Audiodeskription
-│       └── icons/                # SVG-Icons (Play, Pause, CC, etc.)
-├── tests/                        # Test-Suites
-│   ├── unit/                     # Unit Tests (~90% Coverage)
-│   │   ├── formatTime.test.js
-│   │   ├── aria.test.js
-│   │   └── liveRegion.test.js
-│   ├── integration/              # Integration Tests (~80% Coverage)
-│   │   ├── playPause.integration.test.js
-│   │   ├── captions.integration.test.js
-│   │   ├── settings.integration.test.js
-│   │   └── focusManagement.integration.test.js
-│   └── e2e/                      # E2E Tests (~70% Coverage)
-│       ├── axe.e2e.test.js       # Automatisierte Axe-Scans
-│       ├── keyboard.e2e.test.js  # Tastatur-Workflows
-│       ├── responsive.e2e.test.js # 320px - Desktop
-│       └── crossBrowser.e2e.test.js # Chrome, Firefox, Safari
-├── docs/                         # Dokumentation & BA-Material
-│   ├── screenshots/              # UI-Screenshots (verschiedene States)
-│   ├── test-reports/             # Lighthouse, Axe, Playwright-Reports
-│   │   ├── axe/
-│   │   ├── lighthouse/
-│   │   └── playwright/
-│   ├── research/                 # Recherche-Notizen, Tool-Listen
-│   └── evaluation/               # WCAG-Evaluations-Dokumentation
-├── .github/
-│   └── workflows/
-│       └── tests.yml             # CI/CD: Automatisierte Tests bei Push
-├── jest.config.js                # Jest-Konfiguration
-├── playwright.config.js          # Playwright-Konfiguration
-├── package.json                  # Dependencies & Scripts
-└── README.md                     # Diese Datei
+│   │   ├── player.js             # Main Entry Point (alle Init-Funktionen)
+│   │   └── utils/
+│   │       ├── formatTime.js     # Zeitformatierung, aria-valuetext
+│   │       ├── updateTimelineAria.js
+│   │       ├── announceStatus.js # Live-Region (WCAG 4.1.3)
+│   │       ├── togglePlayPause.js
+│   │       ├── toggleCaptions.js
+│   │       ├── toggleDescriptions.js
+│   │       └── toggleFullscreen.js
+│   └── assets/videos/
+│       ├── sample.mp4            # Test-Video (separat laden)
+│       ├── captions-de.vtt
+│       └── descriptions-de.vtt
+├── tests/
+│   ├── unit/                     # Jest
+│   ├── integration/              # Testing Library
+│   └── e2e/                      # Playwright + Axe
+├── docs/                         # accessibility-testing.md, tab-order.md, etc.
+├── .github/workflows/
+│   ├── tests.yml
+│   └── lighthouse.yml
+├── jest.config.cjs
+├── playwright.config.js
+└── package.json
 ```
 
 ## 🎯 WCAG 2.2 Level AA Konformität
@@ -266,6 +262,13 @@ accessible-video-player/
 | …                          | …                       | …                          | …                          |
 
 → Vollständige Evaluations-Tabelle in `docs/evaluation/wcag-compliance.md`
+
+## ⚠️ Bekannte Limitationen
+
+- **Test-Video:** `sample.mp4` muss separat geladen werden (nicht im Repo, >5 MB)
+- **Audiodeskription:** Text-Track (VTT), keine echte Audio-Spur
+- **Videoqualität:** Select vorhanden, Logik nicht implementiert
+- **Fullscreen:** In Headless-E2E-Tests kann Vollbild eingeschränkt sein
 
 ## 🤝 Beitragen
 

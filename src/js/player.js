@@ -1,5 +1,9 @@
 /**
- * Einstiegspunkt für den barrierefreien Video-Player (ES-Modul).
+ * Barrierefreier Video-Player – Main Entry Point (ES-Modul)
+ *
+ * Initialisiert alle Controls: Play/Pause, Timeline, Lautstärke, Untertitel,
+ * Audiodeskription, Settings, Fullscreen, Transkript, globale Shortcuts.
+ * WCAG 2.2 Level AA – Tastatur, Screenreader, Fokus-Management, Live-Region.
  */
 import { formatTime } from './utils/formatTime.js';
 import { updateTimelineAria } from './utils/updateTimelineAria.js';
@@ -274,13 +278,13 @@ function initVolumeControls() {
     button.setAttribute('aria-expanded', String(expanded));
     if (expanded) {
       sliderContainer.removeAttribute('hidden');
-      slider.removeAttribute('tabindex'); // IMP-21: In Tab-Sequenz wenn sichtbar
-      // IMP-28: Fokus auf Slider für sofortige Pfeiltasten-Bedienung (WCAG 2.4.3)
+      slider.removeAttribute('tabindex');
+      // IMP-28: Fokus auf Slider – Nutzer kann sofort Pfeiltasten nutzen (WCAG 2.4.3)
       requestAnimationFrame(() => slider.focus());
     } else {
       sliderContainer.setAttribute('hidden', '');
-      slider.setAttribute('tabindex', '-1'); // IMP-21: Nicht in Tab-Sequenz wenn versteckt
-      // IMP-28: Fokus zurück auf Button beim Schließen
+      slider.setAttribute('tabindex', '-1');
+      // IMP-28: Fokus zurück auf Button – logische Reihenfolge beim Schließen
       button.focus();
     }
   }
@@ -512,7 +516,11 @@ function initSettingsControls() {
     }
   });
 
-  // IMP-26: Tab-Trap im Settings-Panel (WCAG 2.1.2 – erlaubte Tastaturfalle)
+  /**
+   * IMP-26: Fokus-Loop (Tab-Trap) im Settings-Panel
+   * WCAG 2.1.2 erlaubt Tastaturfallen in Modals – Fokus zirkuliert im Panel.
+   * Tab vom letzten Element → erstes; Shift+Tab vom ersten → letztes.
+   */
   panel.addEventListener('keydown', e => {
     if (e.key !== 'Tab' || !isPanelOpen() || panelFocusables.length === 0) {
       return;
@@ -524,13 +532,11 @@ function initSettingsControls() {
     const activeIndex = panelFocusables.indexOf(activeEl);
 
     if (e.shiftKey) {
-      // Shift+Tab vom ersten Element → letztes
       if (activeEl === first) {
         e.preventDefault();
         last.focus();
       }
     } else {
-      // Tab vom letzten Element → erstes
       if (activeEl === last) {
         e.preventDefault();
         first.focus();
@@ -538,7 +544,6 @@ function initSettingsControls() {
         activeIndex >= 0 &&
         activeIndex === panelFocusables.length - 2
       ) {
-        // Tab vom vorletzten → letztes (DOM-Reihenfolge könnte sonst aus Panel führen)
         e.preventDefault();
         last.focus();
       }
@@ -605,8 +610,9 @@ function initSettingsControls() {
 }
 
 /**
- * IMP-29: Globale Shortcuts M/F/C nur bei Player-Fokus (WCAG 2.1.4)
+ * IMP-29: Globale Shortcuts M/F/C (WCAG 2.1.4)
  * M: Mute, F: Fullscreen, C: Captions
+ * Nur aktiv wenn Fokus im Player oder Settings-Panel – verhindert Konflikte mit anderen Shortcuts.
  */
 function initKeyboardShortcuts() {
   const playerContainer = document.querySelector('.player-container');
