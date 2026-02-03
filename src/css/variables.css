@@ -17,6 +17,7 @@
   --color-bg-bar: #f0f0f0;
   --color-bg-bar-secondary: #e5e5e5;
   --color-border: #cccccc;
+  /* IMP-46: Fokus-Indikator ≥3:1 Kontrast zu --color-bg-bar, --color-bg */
   --color-border-focus: #0066cc;
 
   /* === Abstände (rem für 200%-Zoom-Stabilität) === */
@@ -28,8 +29,9 @@
   --space-2xl: 2.5rem;
 
   /* === Schriften (1rem = 16px Basis, skaliert mit Zoom) === */
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, sans-serif;
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -45,7 +47,7 @@
   --player-bar-secondary-height: 2.5rem;
   --player-radius: 0.25rem;
   --player-focus-outline-width: 0.2rem;
-  /* IMP-03: Fokus 3px, Zielgröße 44×44 */
+  /* IMP-03, IMP-46: Fokus ≥2px (empfohlen 3px), WCAG 2.4.7, 2.4.13 */
   --player-focus-outline-width-button: 3px;
   --player-touch-target: 2.75rem; /* 44px bei 16px Basis */
   --color-icon-on-bar: #1a1a1a; /* 3:1+ auf --color-bg-bar */

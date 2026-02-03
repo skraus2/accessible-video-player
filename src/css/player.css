@@ -570,6 +570,10 @@
   background: rgba(0, 102, 204, 0.08);
 }
 
+.player-transcript__toggle:focus:not(:focus-visible) {
+  outline: none;
+}
+
 .player-transcript__toggle:focus-visible {
   outline: var(--player-focus-outline-width-button) solid
     var(--color-border-focus);
@@ -609,6 +613,18 @@
 
 .player-transcript__timestamp:hover {
   text-decoration: none;
+}
+
+/* IMP-46: Fokus-Indikator für Transkript-Links (WCAG 2.4.7, 2.4.13) */
+.player-transcript__timestamp:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.player-transcript__timestamp:focus-visible {
+  outline: var(--player-focus-outline-width-button) solid
+    var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .player-transcript__desc {
