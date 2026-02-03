@@ -1,3 +1,4 @@
+# IMP-43E-H: CI/CD-Integration (GitHub Actions)
 name: Accessibility Tests
 
 on:
@@ -29,7 +30,7 @@ jobs:
 
       - name: Run Linter
         run: npm run lint
-        continue-on-error: true  # Nicht blockieren in Early-Stage
+        continue-on-error: true # Nicht blockieren in Early-Stage
 
       - name: Run Unit Tests
         run: npm run test:unit
@@ -51,6 +52,14 @@ jobs:
           path: docs/test-reports/playwright/
           retention-days: 30
 
+      - name: Upload Test Results (Screenshots/Videos)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 7
+
       - name: Generate Coverage Report
         run: npm run test:coverage
 
@@ -63,4 +72,4 @@ jobs:
           name: codecov-accessible-video-player
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        continue-on-error: true  # Optional, falls Codecov nicht eingerichtet
+        continue-on-error: true # Optional, falls Codecov nicht eingerichtet
