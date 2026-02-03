@@ -480,11 +480,12 @@ function initSettingsControls() {
   }
 
   function closePanel() {
+    // IMP-25 + IMP-27: Fokus zuerst zurück auf Settings-Button (WCAG 2.4.3, 3.2.1)
+    // Vor dem Verstecken, damit Browser-Fokus-Logik bei hidden nicht überschreibt
+    settingsButton.focus();
     panel.setAttribute('hidden', '');
     settingsButton.setAttribute('aria-expanded', 'false');
     setPanelInTabOrder(false); // IMP-21: Panel-Elemente nicht in Tab-Sequenz
-    // IMP-25 + IMP-27: Fokus zurück auf Settings-Button (WCAG 2.4.3, 3.2.1)
-    settingsButton.focus();
   }
 
   // IMP-21: Initial: Settings-Panel versteckt → tabindex="-1" auf allen Fokussierbaren
