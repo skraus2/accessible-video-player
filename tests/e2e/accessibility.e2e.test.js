@@ -44,6 +44,21 @@ test.describe('IMP-43E-A: Axe-Scan Initial-Zustand', () => {
   });
 });
 
+test.describe('IMP-43E-B: Axe-Scan während Wiedergabe', () => {
+  test('Player hat keine Violations während Wiedergabe', async ({ page }) => {
+    await page.goto('/');
+
+    await page.click('.player-btn--play-pause');
+    await page.waitForTimeout(500);
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
+      .analyze();
+
+    expect(results.violations).toEqual([]);
+  });
+});
+
 test.describe('IMP-43: Axe Accessibility (WCAG 2.2 AA)', () => {
   test('Player-Seite: 0 Axe Violations für WCAG 2.2 AA', async ({ page }) => {
     await page.goto('/');
