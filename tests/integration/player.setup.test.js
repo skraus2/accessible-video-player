@@ -813,7 +813,7 @@ describe('Settings-Panel Integration (IMP-20I-D)', () => {
 
     expect(panel).toHaveAttribute('hidden');
     expect(settingsButton).toHaveAttribute('aria-expanded', 'false');
-    expect(settingsButton).toHaveFocus();
+    await waitFor(() => expect(settingsButton).toHaveFocus());
   });
 
   test('IMP-27: Tab zu Close-Button, Enter → Fokus zurück auf Settings-Button', async () => {
